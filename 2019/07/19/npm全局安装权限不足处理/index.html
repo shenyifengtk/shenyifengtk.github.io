@@ -22,6 +22,10 @@
 <meta name="theme-color" content="#222">
 
 
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
 
 
 
@@ -102,7 +106,7 @@
 <meta property="og:site_name" content="神易风 blog">
 <meta property="og:description" content="之前在自己学习ubuntu电脑上搭建一个hexo博客时，发现npm install -g hexo-cli居然出现 123456789101112131415161718192021222324ting@whtll:~$ npm install -g hexo-clinpm WARN checkPermissions Missing write access to /opt/node-v10.16">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-18T13:56:27.117Z">
+<meta property="og:updated_time" content="2019-07-19T15:19:01.617Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="npm全局安装权限不足">
 <meta name="twitter:description" content="之前在自己学习ubuntu电脑上搭建一个hexo博客时，发现npm install -g hexo-cli居然出现 123456789101112131415161718192021222324ting@whtll:~$ npm install -g hexo-clinpm WARN checkPermissions Missing write access to /opt/node-v10.16">
@@ -128,6 +132,17 @@
 
 
 
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111663733-2"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !false) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-111663733-2');
+    }
+  </script>
 
 
 
@@ -381,25 +396,9 @@
                 
               
 
-              <time title="创建时间：2019-07-19 02:43:00" itemprop="dateCreated datePublished" datetime="2019-07-19T02:43:00+08:00">2019-07-19</time>
+              <time title="创建时间：2019-07-19 23:19:01" itemprop="dateCreated datePublished" datetime="2019-07-19T23:19:01+08:00">2019-07-19</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-18 21:56:27" itemprop="dateModified" datetime="2019-07-18T21:56:27+08:00">2019-07-18</time>
-              
             
           </span>
 
@@ -525,14 +524,35 @@
 
       
       
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+            
+          </div>
+        
+        </div>
+      
       
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/14/Nodejs实现socks5协议/" rel="next" title="使用nodejs实现socks5协议">
-                <i class="fa fa-chevron-left"></i> 使用nodejs实现socks5协议
+              <a href="/2019/07/19/Linux安装Nginx正确方式/" rel="next" title="Linux安装Nginx正确方式">
+                <i class="fa fa-chevron-left"></i> Linux安装Nginx正确方式
               </a>
             
           </div>
@@ -540,10 +560,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/19/Linux安装Nginx正确方式/" rel="prev" title="Linux安装Nginx正确方式">
-                Linux安装Nginx正确方式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -802,6 +818,12 @@
     
 
     
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
 
     
 
@@ -949,6 +971,38 @@
   
 
   
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "box";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "bottomCenter";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+        flOptions.iconStyle = "box";
+      
+        flOptions.boxForm = "horizontal";
+      
+        flOptions.position = "middleRight";
+      
+        flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
 
   
 
