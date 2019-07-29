@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="不知不觉使用vim已经有一些时间了，也算得上真正掌握使用技巧了吧。想不起来当初为什么去学习这个编辑器，也不记得怎么学会使用编辑文件，只记得当初按完所有的键盘按键都没有退出vim。一颗种子要经过多少风雨才能长成参天大树，一条小溪要经过多少高山河流才能汇入大海。我们平常学习一样东西，要经过多少困难，多少挫折，只有自己最清楚。 vim模式普通编辑器都可以直接打开文件进行编辑、保存、使用快捷键等等，vi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim操作技巧">
+<meta property="og:url" content="https://shenyifengtk.github.io/2019/07/26/vim操作技巧/index.html">
+<meta property="og:site_name" content="神易风 blog">
+<meta property="og:description" content="不知不觉使用vim已经有一些时间了，也算得上真正掌握使用技巧了吧。想不起来当初为什么去学习这个编辑器，也不记得怎么学会使用编辑文件，只记得当初按完所有的键盘按键都没有退出vim。一颗种子要经过多少风雨才能长成参天大树，一条小溪要经过多少高山河流才能汇入大海。我们平常学习一样东西，要经过多少困难，多少挫折，只有自己最清楚。 vim模式普通编辑器都可以直接打开文件进行编辑、保存、使用快捷键等等，vi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/24/eELfaQ.gif">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/24/eVPouj.gif">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/24/eVVoKU.gif">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/24/eVcIqP.gif">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/24/eVRuCD.gif">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/24/eV5WuQ.gif">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/29/e8pKUO.png">
+<meta property="og:updated_time" content="2019-07-29T14:39:00.179Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vim操作技巧">
+<meta name="twitter:description" content="不知不觉使用vim已经有一些时间了，也算得上真正掌握使用技巧了吧。想不起来当初为什么去学习这个编辑器，也不记得怎么学会使用编辑文件，只记得当初按完所有的键盘按键都没有退出vim。一颗种子要经过多少风雨才能长成参天大树，一条小溪要经过多少高山河流才能汇入大海。我们平常学习一样东西，要经过多少困难，多少挫折，只有自己最清楚。 vim模式普通编辑器都可以直接打开文件进行编辑、保存、使用快捷键等等，vi">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/07/24/eELfaQ.gif">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://shenyifengtk.github.io/2019/07/26/vim操作技巧/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>vim操作技巧 | 神易风 blog</title>
+  
+
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111663733-2"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !false) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-111663733-2');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">神易风 blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">求知若饥，虚心若愚</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2019/07/26/vim操作技巧/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="神易峰">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神易风 blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vim操作技巧
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-26 11:45:44" itemprop="dateCreated datePublished" datetime="2019-07-26T11:45:44+08:00">2019-07-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-29 22:39:00" itemprop="dateModified" datetime="2019-07-29T22:39:00+08:00">2019-07-29</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/07/26/vim操作技巧/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/26/vim操作技巧/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">3 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<p>不知不觉使用vim已经有一些时间了，也算得上真正掌握使用技巧了吧。想不起来当初为什么去学习这个编辑器，也不记得怎么学会使用编辑文件，只记得当初按完所有的键盘按键都没有退出vim。一颗种子要经过多少风雨才能长成参天大树，一条小溪要经过多少高山河流才能汇入大海。我们平常学习一样东西，要经过多少困难，多少挫折，只有自己最清楚。</p>
+<h3 id="vim模式"><a href="#vim模式" class="headerlink" title="vim模式"></a>vim模式</h3><p>普通编辑器都可以直接打开文件进行编辑、保存、使用快捷键等等，vim也具备这些功能，但是有些功能要在特定模式下才能使用。也是因为这些模式，让vim学习路线变得特别比较陡峭。vim具有多种模式，每种模式都有特定功能，有时你需要某些功能时，特意切换到指定模式下操作。使用键盘就可以随意切换模式，让vim不依赖鼠标操作，使用最小化组合键的操作，编辑效率大大提高。</p>
+<h5 id="普通模式"><a href="#普通模式" class="headerlink" title="普通模式"></a>普通模式</h5><p><img src="https://s2.ax1x.com/2019/07/24/eELfaQ.gif" alt="eELfaQ.md.gif"><br>使用vim打开文件，进入普通模式，也是vim默认模式。在这个模式下，可以移动光标，复制、剪切、粘贴、删除文件，在这个模式下输入按键全部都是命令快捷键。比如你想进行复制操作，<strong><code>yy</code></strong> 复制当前行，<strong><code>p</code></strong> 粘贴光标下面，<strong><code>dw</code></strong> 删除一个单词。使用<strong><code>a</code></strong> 切换到<a href="#插入模式">插入模式</a>，还有其他的快捷键也能做到，<strong><code>:</code></strong> 切换到<a href="#命令模式">命令模式</a>，<em><code>Ctrl</code></em> + <em><code>v</code></em> 进入<a href="#选择模式">选择模式</a>。</p>
+<h5 id="插入模式"><a href="#插入模式" class="headerlink" title="插入模式"></a>插入模式</h5><p><img src="https://s2.ax1x.com/2019/07/24/eVPouj.gif" alt="insert"><br>左下角显示<code>-- insert --</code>，表明vim正处于插入模式。这个模式会读取键盘输入，显示在屏幕内，大部分编辑器打开就处于插入模式。使用<strong><code>Esc</code></strong> 可以重新进入普通模式，但是输入字符不会保存到文件中。</p>
+<h5 id="可视模式"><a href="#可视模式" class="headerlink" title="可视模式"></a>可视模式</h5><p><img src="https://s2.ax1x.com/2019/07/24/eVVoKU.gif" alt="visual.git"><br>这个模式主要功能，可以使用移动命令，扩大高亮的文本区域。输入命令将直接作用于选中文本区域。这就相当于你用鼠标选中一段文本区域，可以使用可以使用命令进行，复制、剪切、修改操作，但是vim并不需要鼠标。</p>
+<h5 id="选择模式"><a href="#选择模式" class="headerlink" title="选择模式"></a>选择模式</h5><p><img src="https://s2.ax1x.com/2019/07/24/eVcIqP.gif" alt="select"><br>这个模式要在可视模式下才能进入，可以直接使用退格键或者空格键删除选中文本区域，或者直接输入新的文本，替换选中高亮区域进入插入模式。</p>
+<h5 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h5><p><img src="https://s2.ax1x.com/2019/07/24/eVRuCD.gif" alt="cmd"><br>在普通模式下输入<strong><code>:</code></strong> ,被解析成命令模式，<code>:</code>后面接命令，回车直接执行命令。例如上图，<code>:q</code>回车直接退出vim编辑器。一般退出vim，需要在命令模式下输入<code>:wq</code>，保持退出。</p>
+<h5 id="Ex模式"><a href="#Ex模式" class="headerlink" title="Ex模式"></a>Ex模式</h5><p><img src="https://s2.ax1x.com/2019/07/24/eV5WuQ.gif" alt="ex.git"><br>在普通模式使用<strong><code>Q</code></strong> 命令进入ex模式，这和命令行模式比较相似，在使用”:visual”命令离开Ex模式前，可以一次执行多条命令。这个命令自己使用得很少，只是从google上知道这些。</p>
+<p>平常在使用vim主要是在普通模式、插入模式、可视模式、命令模式进行操作，掌握这里基本就可以熟悉使用vim了。</p>
+<h3 id="vim命令快捷键"><a href="#vim命令快捷键" class="headerlink" title="vim命令快捷键"></a>vim命令快捷键</h3><h5 id="全局移动"><a href="#全局移动" class="headerlink" title="全局移动"></a>全局移动</h5><ul>
+<li><code>h</code> 向左移动 ←</li>
+<li><code>j</code> 向下移动 ↓</li>
+<li><code>k</code> 向上移动 ↑</li>
+<li><code>l</code> 向右移动 →</li>
+</ul>
+<p>掌握这些快捷键，移动光标得时候，手机基本不会离开核心键盘区，有没有像<code>w</code>,<code>a</code>,<code>s</code>,<code>d</code>移动角色的感觉🙂。</p>
+<ul>
+<li><code>gg</code> 快速移动到开头</li>
+<li><code>G</code> 快速移动文本结尾</li>
+<li><code>Ctrl</code> - <code>f</code> 向下翻页 即 PageDown 翻页</li>
+<li><code>Ctrl</code> - <code>b</code> 向上翻页 即 PageUp 翻页</li>
+<li>命令模式<code>:n</code> 移动指定行数n</li>
+</ul>
+<h5 id="行内移动"><a href="#行内移动" class="headerlink" title="行内移动"></a>行内移动</h5><ul>
+<li><code>w</code> 或者 <code>W</code> 移动到下一个单词（word） </li>
+<li><code>b</code> 或者 <code>B</code> 移动到上一个单词</li>
+<li><code>e</code> 移动下一个单词结尾</li>
+<li><code>^</code> 移动到当前行第一个非空字符</li>
+<li><code>0</code> 移动到行首</li>
+<li><code>$</code> 移动到行尾</li>
+<li><code>f</code>{char} 在行内正向查找char字符，光标会移动到目标char上</li>
+<li><code>F</code>{char} 在行内反向查找char字符，光标会移动到目标char上</li>
+<li><code>;</code> 在行内正向重复搜索char字符，同上</li>
+<li><code>,</code> 在行内搜索上个一个char字符，反向搜索，同上</li>
+</ul>
+<h5 id="进入插入模式"><a href="#进入插入模式" class="headerlink" title="进入插入模式"></a>进入插入模式</h5><p>要想编写文本内容，还必须在插入模式下进行操作，以下命令由普通模式进入到插入模式</p>
+<ul>
+<li><code>i</code> 进入插入模式，在当前光标下输入</li>
+<li><code>o</code> 在当前光标下面新建空白行插入字符</li>
+<li><code>a</code> 在光标后台插入字符（append）</li>
+<li><code>A</code> 在行尾插入，a$ =&gt; A </li>
+<li><code>I</code> 在行首插入, i^ =&gt; I</li>
+<li><code>O</code> 在光标上面新建空白行插入</li>
+<li><code>s</code> 删除当前光标字符，进入插入模式</li>
+</ul>
+<h5 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h5><p><code>d</code> 删除字符(delete)，<code>d</code>本身没有任何涵义，但是它可以跟其他命令组合，完成一些快速操作。</p>
+<ul>
+<li><code>x</code> 删除当前字符 </li>
+<li><code>dd</code> 删除当前行</li>
+<li><code>dw</code> 从光标开始删除整个单词(delete word)</li>
+<li><code>db</code> 从光标往前删除到一个字符，反向移动删除，如果</li>
+<li><code>dbx</code> 反向删除整个单词</li>
+<li><code>d$</code> 从当前位置删除到行结尾</li>
+<li><code>d^</code> 反向删除到行开头</li>
+<li><code>ndd</code> n 表示删除行数,2dd 删除两行</li>
+<li><code>ddn</code> 同上</li>
+</ul>
+<h5 id="了解vim操作"><a href="#了解vim操作" class="headerlink" title="了解vim操作"></a>了解vim操作</h5><blockquote>
+<p>Vim的强大很大程<br>度上源自操作符与动作命令相结合。在本节，我们将看到它是如何工作的，并考虑其寓义 –<code>vim实用技巧第2版</code></p>
+</blockquote>
+<p><font size="5">操作符 + 动作命令 = 操作</font></p>
+<p>d<span style="color:red;">{motion}</span> 命令可以对一个字符<code>dl</code>、一个完整单词<code>daw</code>或
+一整个段落<code>dap</code>进行操作，它作用的范围由动作命令决<br>定。c<span style="color:red;">{motion}</span>、y<span style="color:red;">{motion}</span> 以及其他一些命令也类似，它们被统称为操作符（operator）。</p>
+<center>Vim的操作符命令</center>
+
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="center">用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">c</td>
+<td align="center">修改（change）</td>
+</tr>
+<tr>
+<td align="left">d</td>
+<td align="center">删除(delete)</td>
+</tr>
+<tr>
+<td align="left">y</td>
+<td align="center">复制到寄存器</td>
+</tr>
+<tr>
+<td align="left">g~</td>
+<td align="center">反转大小写</td>
+</tr>
+<tr>
+<td align="left">gu</td>
+<td align="center">反转小写</td>
+</tr>
+<tr>
+<td align="left">gU</td>
+<td align="center">反转大写</td>
+</tr>
+<tr>
+<td align="left">&gt;</td>
+<td align="center">增加缩进</td>
+</tr>
+<tr>
+<td align="left">&lt;</td>
+<td align="center">减小缩进</td>
+</tr>
+<tr>
+<td align="left">=</td>
+<td align="center">自动缩进</td>
+</tr>
+</tbody></table>
+<p>看着上面删除操作，是不是很容易理解操作符 + 动作命令 的模式，比如我们已经知道<code>daw</code>删除整个单词，<code>gU</code>反转大写，我们就可以使用<code>gUaw</code>反转整个单词,<code>gUap</code> 反转整个段落大写</p>
+<h6 id="学会举一反三"><a href="#学会举一反三" class="headerlink" title="学会举一反三"></a>学会举一反三</h6><ul>
+<li><code>ea</code> 在单词后面插入</li>
+<li><code>cw</code> 修改整个单词</li>
+<li><code>c$</code> 修改从光标到行尾的内容</li>
+<li><code>c^</code> 修改从光标到行首的内容</li>
+<li><code>yw</code> 复制从光标开始到词尾的字符</li>
+<li><code>y^</code> 复制从光标到行首的内容</li>
+<li><code>y$</code> 复制从光标到行尾的内容</li>
+<li><code>nyy</code> 复制n行</li>
+</ul>
+<h3 id="vim复制剪切操作"><a href="#vim复制剪切操作" class="headerlink" title="vim复制剪切操作"></a>vim复制剪切操作</h3><p>由于vim中copy快捷键已经被change修改占用了，只能使用<code>y</code>代表复制(yank),粘贴（put）使用<code>p</code>，<code>d</code>其实是将内容剪切到寄存器中，剪切实现删除操作。<code>ddp</code> 看起来是将两行位置互换，其实先剪切当前行到寄存器中，<code>p</code>粘贴到光标下的位置。主要记住使用命令<code>y</code> + 动作指令 或者 <code>d</code> + 动作指令，都是将文本暂存到寄存器中，使用<code>p</code> 或者<code>P</code> 进行粘贴。进行一个小demo练习，将变量field替换下面的函数参数foo。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> field = method();</span><br><span class="line">fun(foo)</span><br></pre></td></tr></table></figure>
+
+<p>思路： 先使用<code>yw</code>复制field字段，下移动foo中，<code>dw</code>删除foo，<code>P</code>粘贴。但是你会发现粘贴结构居然还是foo。这是因为<code>dw</code>将删除文本放入寄存器中，覆盖了上面copy的变量。我们平常复制，剪切的文本都会暂存再无名寄存器中。</p>
+<h5 id="认识无名寄存器"><a href="#认识无名寄存器" class="headerlink" title="认识无名寄存器"></a>认识无名寄存器</h5><blockquote>
+<p>在vim不使用单一寄存器进行复制、剪切、粘贴，而是为这些操作提供多组寄存器。当使用删除、复制与粘贴命令时，可以明确指定它们中的某一个进行操作。</p>
+</blockquote>
+<p>在vim中的删除、复制、粘贴都是使用寄存器，可以使用<code>&quot;{registerName}</code>方式命名寄存器。平时我们使用<code>dd</code>,<code>yy</code>命令，不指名寄存器名称默认使用无名寄存器。倘若没有指定要使用的寄存器，Vim将缺省使用无名寄存器，它可以用双引号表示（参见 :h quote_quote ）。无名寄存器可以使用<code>&quot;&quot;</code>表示，比如<code>&quot;&quot;yy</code> 相当于<code>yy</code>，<code>&quot;&quot;p</code> 相当于<code>p</code></p>
+<h5 id="数字寄存器"><a href="#数字寄存器" class="headerlink" title="数字寄存器"></a>数字寄存器</h5><p>“[0-9]表示数字寄存器，数字越小表示最早在寄存器内容。例如<code>&quot;0</code>表示第一个进入寄存器文本,<code>&quot;1</code>表示第二个进入寄存器内容，类似值栈结构，先进后出排列。可以使用<code>:reg</code> 查看寄存器中内容。<br><img src="https://s2.ax1x.com/2019/07/29/e8pKUO.png" alt="reg.png"><br>比如上面的例子我们可以使用<code>&quot;0P</code> 粘贴field 变量，就不害怕被覆盖的情况。</p>
+<h5 id="系统寄存器"><a href="#系统寄存器" class="headerlink" title="系统寄存器"></a>系统寄存器</h5><p>在win系统中，可以在任意地方Ctrl c复制文本，vim是否可以粘贴非vim中复制内容？当然是可以的。<code>&quot;+</code>表示系统寄存器，可以读取系统vim之外的系统粘贴板中的内容，可以粘贴内容，复制到系统粘贴板中去。</p>
+<h4 id="粘贴"><a href="#粘贴" class="headerlink" title="粘贴"></a>粘贴</h4><ul>
+<li><code>p</code> 将寄存器中的文本粘贴到光标之后</li>
+<li><code>P</code> 将寄存器中的文本粘贴到光标之前</li>
+</ul>
+<p>使用粘贴命令前面+寄存器名称，就可以直接使用专用寄存器中的内容了，例如<code>&quot;+p</code>直接粘贴系统剪贴板中的内容。</p>
+<p>在插入模式使用<code>&lt;Ctrl r&gt;</code> + 寄存器名称粘贴字符文本。例如可以使用<code>&lt;Ctrl r&gt;&quot;</code>粘贴无名寄存器中内容。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/19/npm全局安装权限不足处理/" rel="next" title="npm全局安装权限不足">
+                <i class="fa fa-chevron-left"></i> npm全局安装权限不足
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="神易峰">
+            
+              <p class="site-author-name" itemprop="name">神易峰</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#vim模式"><span class="nav-number">1.</span> <span class="nav-text">vim模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#普通模式"><span class="nav-number">1.0.1.</span> <span class="nav-text">普通模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插入模式"><span class="nav-number">1.0.2.</span> <span class="nav-text">插入模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#可视模式"><span class="nav-number">1.0.3.</span> <span class="nav-text">可视模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#选择模式"><span class="nav-number">1.0.4.</span> <span class="nav-text">选择模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#命令模式"><span class="nav-number">1.0.5.</span> <span class="nav-text">命令模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ex模式"><span class="nav-number">1.0.6.</span> <span class="nav-text">Ex模式</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#vim命令快捷键"><span class="nav-number">2.</span> <span class="nav-text">vim命令快捷键</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#全局移动"><span class="nav-number">2.0.1.</span> <span class="nav-text">全局移动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#行内移动"><span class="nav-number">2.0.2.</span> <span class="nav-text">行内移动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#进入插入模式"><span class="nav-number">2.0.3.</span> <span class="nav-text">进入插入模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删除"><span class="nav-number">2.0.4.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#了解vim操作"><span class="nav-number">2.0.5.</span> <span class="nav-text">了解vim操作</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#学会举一反三"><span class="nav-number">2.0.5.1.</span> <span class="nav-text">学会举一反三</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim复制剪切操作"><span class="nav-number">3.</span> <span class="nav-text">vim复制剪切操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#认识无名寄存器"><span class="nav-number">3.0.1.</span> <span class="nav-text">认识无名寄存器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数字寄存器"><span class="nav-number">3.0.2.</span> <span class="nav-text">数字寄存器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#系统寄存器"><span class="nav-number">3.0.3.</span> <span class="nav-text">系统寄存器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#粘贴"><span class="nav-number">3.1.</span> <span class="nav-text">粘贴</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">神易峰</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">17k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">16 分钟</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.2</div>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shenyifengtk.github.io/2019/07/26/vim操作技巧/";
+    this.page.identifier = "2019/07/26/vim操作技巧/";
+    this.page.title = 'vim操作技巧';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "box";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "bottomCenter";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+        flOptions.iconStyle = "box";
+      
+        flOptions.boxForm = "horizontal";
+      
+        flOptions.position = "middleRight";
+      
+        flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
