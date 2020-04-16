@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://shenyifengtk.github.io/2020/04/15/Openresty%20Lua%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</loc>
+    
+    <lastmod>2020-04-16T16:06:57.838Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://shenyifengtk.github.io/about/index.html</loc>
+    
+    <lastmod>2020-04-16T15:49:16.643Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://shenyifengtk.github.io/2019/09/13/Spring%E4%BD%BF%E7%94%A8xml%E5%90%AF%E5%8A%A8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
     
     <lastmod>2019-09-13T08:22:24.649Z</lastmod>
@@ -33,13 +47,6 @@
     <loc>https://shenyifengtk.github.io/2019/07/14/Nodejs%E5%AE%9E%E7%8E%B0socks5%E5%8D%8F%E8%AE%AE/</loc>
     
     <lastmod>2019-07-15T14:43:39.123Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://shenyifengtk.github.io/about/index.html</loc>
-    
-    <lastmod>2019-07-13T09:37:37.304Z</lastmod>
     
   </url>
   

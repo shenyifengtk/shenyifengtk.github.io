@@ -98,18 +98,18 @@
 
 
 
-  <meta name="description" content="如果你和我一样，作为一个苦逼的Java后台除了实现实现一大堆项目功能，还要兼顾项目的部署，运维工作。在新的服务器上安装新Nginx，在安装之前看下网上的教程,面对五花八门的教程，各式各样的安装方法，心里总会嘀咕什么方式才是最好的，或者说什么方法才是最适合自己的？下面我们一起来分析Nginx各种安装方式，分别适合于那种情况。 使用系统二进制源方式安装在Ubuntu/Debian系 sudo apt-">
-<meta name="keywords" content="Nginx">
+  <meta name="description" content="有好久没有写过博客了，已经记不清上次发博客是什么时候了。去年到现在经历很多事，尝试了好多新事物，变化也挺多的。一次偶然机会了解到lua这门新语言，自己简单实现文件上传功能。  上传代码思路： 根据上传URL来命名文件，使用OpenResty resty.upload模块获取上传文件，调用lua原生类库io.open(filename,&amp;#39;w+&amp;#39;)刷入硬盘。具体实现代码 123456">
+<meta name="keywords" content="Lua">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux安装Nginx正确方式">
-<meta property="og:url" content="https://shenyifengtk.github.io/2019/07/19/Linux安装Nginx正确方式/index.html">
+<meta property="og:title" content="Openresty Lua实现文件上传">
+<meta property="og:url" content="https://shenyifengtk.github.io/2020/04/15/Openresty Lua实现文件上传/index.html">
 <meta property="og:site_name" content="神易风 blog">
-<meta property="og:description" content="如果你和我一样，作为一个苦逼的Java后台除了实现实现一大堆项目功能，还要兼顾项目的部署，运维工作。在新的服务器上安装新Nginx，在安装之前看下网上的教程,面对五花八门的教程，各式各样的安装方法，心里总会嘀咕什么方式才是最好的，或者说什么方法才是最适合自己的？下面我们一起来分析Nginx各种安装方式，分别适合于那种情况。 使用系统二进制源方式安装在Ubuntu/Debian系 sudo apt-">
+<meta property="og:description" content="有好久没有写过博客了，已经记不清上次发博客是什么时候了。去年到现在经历很多事，尝试了好多新事物，变化也挺多的。一次偶然机会了解到lua这门新语言，自己简单实现文件上传功能。  上传代码思路： 根据上传URL来命名文件，使用OpenResty resty.upload模块获取上传文件，调用lua原生类库io.open(filename,&amp;#39;w+&amp;#39;)刷入硬盘。具体实现代码 123456">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-19T15:18:15.334Z">
+<meta property="og:updated_time" content="2020-04-16T16:06:57.838Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux安装Nginx正确方式">
-<meta name="twitter:description" content="如果你和我一样，作为一个苦逼的Java后台除了实现实现一大堆项目功能，还要兼顾项目的部署，运维工作。在新的服务器上安装新Nginx，在安装之前看下网上的教程,面对五花八门的教程，各式各样的安装方法，心里总会嘀咕什么方式才是最好的，或者说什么方法才是最适合自己的？下面我们一起来分析Nginx各种安装方式，分别适合于那种情况。 使用系统二进制源方式安装在Ubuntu/Debian系 sudo apt-">
+<meta name="twitter:title" content="Openresty Lua实现文件上传">
+<meta name="twitter:description" content="有好久没有写过博客了，已经记不清上次发博客是什么时候了。去年到现在经历很多事，尝试了好多新事物，变化也挺多的。一次偶然机会了解到lua这门新语言，自己简单实现文件上传功能。  上传代码思路： 根据上传URL来命名文件，使用OpenResty resty.upload模块获取上传文件，调用lua原生类库io.open(filename,&amp;#39;w+&amp;#39;)刷入硬盘。具体实现代码 123456">
 
 
 
@@ -117,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://shenyifengtk.github.io/2019/07/19/Linux安装Nginx正确方式/">
+  <link rel="canonical" href="https://shenyifengtk.github.io/2020/04/15/Openresty Lua实现文件上传/">
 
 
 
@@ -127,7 +127,7 @@
   };
 </script>
 
-  <title>Linux安装Nginx正确方式 | 神易风 blog</title>
+  <title>Openresty Lua实现文件上传 | 神易风 blog</title>
   
 
 
@@ -353,7 +353,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2019/07/19/Linux安装Nginx正确方式/">
+    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2020/04/15/Openresty Lua实现文件上传/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="神易峰">
@@ -370,7 +370,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux安装Nginx正确方式
+          <h1 class="post-title" itemprop="name headline">Openresty Lua实现文件上传
 
               
             
@@ -396,9 +396,25 @@
                 
               
 
-              <time title="创建时间：2019-07-19 23:18:15" itemprop="dateCreated datePublished" datetime="2019-07-19T23:18:15+08:00">2019-07-19</time>
+              <time title="创建时间：2020-04-15 22:27:37" itemprop="dateCreated datePublished" datetime="2020-04-15T22:27:37+08:00">2020-04-15</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-04-17 00:06:57" itemprop="dateModified" datetime="2020-04-17T00:06:57+08:00">2020-04-17</time>
+              
             
           </span>
 
@@ -418,6 +434,13 @@
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/Lua/" itemprop="url" rel="index"><span itemprop="name">Lua</span></a></span>
+
+                
+                
               
             </span>
           
@@ -433,8 +456,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/07/19/Linux安装Nginx正确方式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/19/Linux安装Nginx正确方式/" itemprop="commentCount"></span>
+                <a href="/2020/04/15/Openresty Lua实现文件上传/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/15/Openresty Lua实现文件上传/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -463,7 +486,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4k</span>
+                <span title="本文字数">1.8k</span>
               
 
               
@@ -477,7 +500,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">4 分钟</span>
+                <span title="阅读时长">2 分钟</span>
               
             </div>
           
@@ -497,108 +520,13 @@
       
 
       
-        <p>如果你和我一样，作为一个苦逼的Java后台除了实现实现一大堆项目功能，还要兼顾项目的部署，运维工作。在新的服务器上安装新Nginx，在安装之前看下网上的教程,面对五花八门的教程，各式各样的安装方法，心里总会嘀咕什么方式才是最好的，或者说什么方法才是最适合自己的？下面我们一起来分析Nginx各种安装方式，分别适合于那种情况。</p>
-<h3 id="使用系统二进制源方式安装"><a href="#使用系统二进制源方式安装" class="headerlink" title="使用系统二进制源方式安装"></a>使用系统二进制源方式安装</h3><p>在Ubuntu/Debian系</p>
-<pre><code>sudo apt-get install nginx</code></pre><p>或者RedHat/CentOS系</p>
-<pre><code>sudo yum install nginx </code></pre><p> 这种方式最简单的，最快捷的方式，但是不是最好的方式，下面我们来说这种主要问题。</p>
-<p>优点</p>
-<ul>
-<li>所有安装二进制依赖已经处理好了，不用担心兼容性问题，开箱即用</li>
-<li>Nginx的连接配置，用户权限这个都不用处理，已经帮你写好这块了</li>
-<li>不用担心Nginx Bug维护升级问题，直接获取最新系统就可以了</li>
-<li>卸载简单，直接一个命令即可</li>
-<li>日志维护简单，自动截断当天日志，压缩保存</li>
-</ul>
-<p>缺点</p>
-<ul>
-<li>不能自主选择安装版本</li>
-<li>不能自主选择编译的模块</li>
-<li>扩展功能变得很麻烦，需要重新编译</li>
-<li>目类结构复杂，配置文件在<code>/etc/</code>下，部署文件在<code>/var/www</code></li>
-<li>重启服务，修改配置都需要root权限</li>
-<li>性能差一点编译安装</li>
-</ul>
-<p>如果你是一个Linux新手，绝对推荐使用这中方式安装，不用考虑编译依赖问题，直接安装完就可以使用。但是如果你这个服务器是用于生产环境正在开发逐步完善的过程，不推荐使用这种方式。将来可能会添加第三方模块，到时肯定要编译安装(下面会说到)。在重启服务器的时候，不要使用root用户，而是使用<code>sudo</code>短暂获取root。如果你这条服务器都是用来部署一些静态文件，主要做一些web空间，平常主要用ftp工具部署文件，用这种方式肯定没什么问题的。</p>
-<h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><p>优缺点，我就不写了，基本就是上面的颠倒过来就可以了。使用这种方法安装，都必须懂一点Linux编译知识，Linux中度用户才可以驾驭。我看见网上大多数教程，都是将编译依赖直接装在<code>/usr/local/</code>这种方式并不好。如果将来我们要卸载这些依赖，发现非常麻烦。并不是直接在目类下直接删除就可以完事的，有些Linux发行版本，会将安装文件，写入配置文件中，这些配置文件有不知道哪里找。如果依赖版本影响到其他软件，怎么处理版本问题。我们只想安装Nginx，结果延申出一大堆问题。</p>
-<h5 id="编译环境准备"><a href="#编译环境准备" class="headerlink" title="编译环境准备"></a>编译环境准备</h5><p>在开始之前，保证你的Linux准备了gcc、make、wget,g++ 这些软件。<br>创建一个目类用来存放下载文件,进入目录中下载依赖库源文件 </p>
-<p>下载<code>openssl</code>主要用于ssl模块加密，支持htps</p>
-<pre><code>wget https://www.openssl.org/source/openssl-1.0.2s.tar.gz</code></pre><p>下载<code>pcre</code>来实现对地址重定向，地址重写功能和localtion指令以及正则表达式的支持     </p>
-<pre><code>wget https://ftp.pcre.org/pub/pcre/pcre-8.43.tar.gz</code></pre><p>下载<code>zlib</code> gzip压缩模块</p>
-<pre><code>wget https://zlib.net/zlib-1.2.11.tar.gz</code></pre><p>下载Nginx </p>
-<pre><code>wget http://nginx.org/download/nginx-1.17.1.tar.gz</code></pre><p>使用tar 解压所有的文件</p>
-<pre><code>ls *.tar.gz | xargs -n1 tar xzvf  </code></pre><h5 id="编译选项"><a href="#编译选项" class="headerlink" title="编译选项"></a>编译选项</h5><p>使用<code>./configure</code>设置各种Nginx参数的脚本，包括源和配置文件的路径，编译器选项，连接处理方法和模块列表。该脚本通过创建编译代码和安装Nginx开源所需的Makefile来完成。</p>
-<table>
-<thead>
-<tr>
-<th align="center">参数</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">–prefix=&lt;PATH&gt;</td>
-<td align="center">Nginx安装目录，以及有其他配置脚本选项的路径设置的所有相对路径的基本位置。默认值<code>/usr/local/nginx</code></td>
-</tr>
-<tr>
-<td align="center">–sbin-path=&lt;PATH</td>
-<td align="center">Nginx二进制执行文件的名称，默认值:<code>&lt;prefix&gt;/sbin/nginx</code></td>
-</tr>
-<tr>
-<td align="center">–conf-path=&lt;PATH&gt;</td>
-<td align="center">Nginx配置文件的名称。但是，您可以通过在nginx命令行上使用选项指定其他文件来始终在启动时覆盖此值。默认值：<code>&lt;prefix&gt; conf / nginx.conf-c &lt;FILENAME&gt;</code></td>
-</tr>
-<tr>
-<td align="center">–pid-path=&lt;PATH&gt;</td>
-<td align="center">nginx.pid文件的名称，用于存储nginx主进程的进程ID 。安装后，可以使用Nginx配置文件中的pid指令更改文件名的路径。默认值：<code>&lt;prefix&gt; /logs/nginx.pid</code></td>
-</tr>
-<tr>
-<td align="center">–error-log-path=&lt;PATH&gt;</td>
-<td align="center">error，warn和诊断数据的日志文件的名称。安装后，可以使用Nginx配置文件中的error_log指令更改文件名。默认值：<code>&lt;prefix&gt; /logs/error.log</code></td>
-</tr>
-<tr>
-<td align="center">–http-log-path=&lt;PATH&gt;</td>
-<td align="center">HTTP服务器请求的主日志文件的名称。安装后，始终可以使用Nginx配置文件中的access_log指令更改文件名。默认值：<code>&lt;prefix&gt; /logs/access.log</code></td>
-</tr>
-<tr>
-<td align="center">–user=&lt;NAME&gt;</td>
-<td align="center">Nginx运行进程的拥有者。安装后，可以使用Nginx配置文件中的user指令更改名称。默认：<code>nobody</code></td>
-</tr>
-<tr>
-<td align="center">–group=name</td>
-<td align="center">nginx运行进程的拥有者用户组。安装后，可以使用NGINX配置文件中的user指令更改名称。默认值：–user选项设置的值</td>
-</tr>
-<tr>
-<td align="center">–with-pcre=&lt;PATH&gt;</td>
-<td align="center">PCRE库源代码的路径，这是位置指令和Rewrite模块中正则表达式支持所必需的</td>
-</tr>
-<tr>
-<td align="center">–with-pcre-jit</td>
-<td align="center">使用“即时编译”支持（pcre_jit指令）构建PCRE库</td>
-</tr>
-<tr>
-<td align="center">–with-zlib=&lt;PATH&gt;</td>
-<td align="center">zlib库的源代码路径，Gzip模块需要该路径</td>
-</tr>
-<tr>
-<td align="center">–with-http_ssl_modul</td>
-<td align="center">启用HTTPS支持</td>
-</tr>
-<tr>
-<td align="center">–with-http_v2_module</td>
-<td align="center">开启 HTTP/2请求支持</td>
-</tr>
-</tbody></table>
-<p>还要太多编译参数我就不一一列举，有兴趣的同学可以自己去<br><a href="https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#sources" target="_blank" rel="noopener">nginx官网</a>参看</p>
-<h5 id="编译安装-1"><a href="#编译安装-1" class="headerlink" title="编译安装"></a>编译安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">./configure \</span><br><span class="line">   --with-openssl=../openssl-1.0.2s \</span><br><span class="line">   --with-pcre=../pcre-8.43 \</span><br><span class="line">   --with-zlib=../zlib-1.2.11 \</span><br><span class="line">   --with-pcre-jit --user=admin \</span><br><span class="line">   --prefix=/home/admin/nginx \</span><br><span class="line">   --with-http_ssl_module \</span><br><span class="line">   --with-http_v2_module</span><br></pre></td></tr></table></figure>
+        <blockquote>
+<p>有好久没有写过博客了，已经记不清上次发博客是什么时候了。去年到现在经历很多事，尝试了好多新事物，变化也挺多的。一次偶然机会了解到lua这门新语言，自己简单实现文件上传功能。</p>
+</blockquote>
+<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>思路： 根据上传URL来命名文件，使用OpenResty resty.upload模块获取上传文件，调用lua原生类库<code>io.open(filename,&#39;w+&#39;)</code>刷入硬盘。具体实现代码</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> cjson = <span class="built_in">require</span> <span class="string">"cjson"</span></span><br><span class="line"><span class="keyword">local</span> result = &#123;&#125;</span><br><span class="line"><span class="keyword">local</span> upload = <span class="built_in">require</span> <span class="string">"resty.upload"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 获取url 文件名</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_filename</span><span class="params">(url)</span></span></span><br><span class="line">	<span class="keyword">local</span> filename = <span class="built_in">string</span>.<span class="built_in">match</span>(url,<span class="string">'.+/([^/]*%.%w+)$'</span>)</span><br><span class="line"><span class="keyword">return</span> filename</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 错误响应</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">err</span><span class="params">(code,description)</span></span></span><br><span class="line">    result.code = code</span><br><span class="line">    result.description = description</span><br><span class="line">    ngx.header[<span class="string">'Content-Type'</span>] = <span class="string">'application/json'</span></span><br><span class="line">    <span class="keyword">return</span> cjson.encode(result)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ok</span><span class="params">(data)</span></span></span><br><span class="line">	result.data = data</span><br><span class="line">	result.code = <span class="number">200</span></span><br><span class="line">	ngx.header[<span class="string">'Content-Type'</span>] = <span class="string">'application/json'</span></span><br><span class="line">	<span class="keyword">return</span> cjson.encode(result)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--上传文件</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">upload_file</span><span class="params">()</span></span></span><br><span class="line">	<span class="keyword">local</span> chunk_size = <span class="number">4096</span></span><br><span class="line">	<span class="keyword">local</span> form , err = upload:new(chunk_size)</span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">not</span> form <span class="keyword">then</span></span><br><span class="line">	ngx.<span class="built_in">log</span>(ngx.ERR,<span class="string">'failed to new upload: '</span>,err)</span><br><span class="line">	ngx.<span class="built_in">exit</span>(ngx.HTTP_INTERNAL_SERVER_ERROR)</span><br><span class="line"> 	<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">local</span> file</span><br><span class="line">	<span class="keyword">local</span> filename = get_filename(ngx.var.uri)</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span> </span><br><span class="line">		<span class="keyword">local</span> typ,res,err = form:<span class="built_in">read</span>()</span><br><span class="line">		<span class="keyword">if</span> <span class="keyword">not</span> typ <span class="keyword">then</span></span><br><span class="line">		ngx.say(err(<span class="number">504</span>,<span class="string">'failed to read '</span>.. err))</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> typ == <span class="string">'header'</span> <span class="keyword">then</span> </span><br><span class="line">		file = <span class="built_in">io</span>.<span class="built_in">open</span>(<span class="string">'/usr/local/openresty/nginx/html/lua/'</span> .. filename,<span class="string">'w+'</span>)	</span><br><span class="line">		<span class="keyword">elseif</span> typ == <span class="string">'body'</span> <span class="keyword">then</span>	</span><br><span class="line">		file:<span class="built_in">write</span>(res)</span><br><span class="line">		<span class="keyword">elseif</span> typ == <span class="string">'part_end'</span> <span class="keyword">then</span></span><br><span class="line">		file:<span class="built_in">close</span>()</span><br><span class="line">		file = <span class="literal">nil</span></span><br><span class="line">		ngx.say(ok(<span class="string">'upload success'</span>))</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">		<span class="keyword">elseif</span> typ == <span class="string">'eof'</span> <span class="keyword">then</span></span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> http_method = ngx.var.request_method</span><br><span class="line"><span class="keyword">if</span>  http_method == <span class="string">'POST'</span> <span class="keyword">then</span></span><br><span class="line">	upload_file()</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    ngx.say(err(<span class="number">405</span>,<span class="string">'not supper method upload file'</span>))</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 
-<p>输出以下信息，说明依赖没问题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Configuration summary</span><br><span class="line">  + using PCRE library: ../pcre-8.43</span><br><span class="line">  + using OpenSSL library: ../openssl-1.0.2s</span><br><span class="line">  + using zlib library: ../zlib-1.2.11</span><br><span class="line">  </span><br><span class="line">  nginx path prefix: &quot;/home/admin/nginx&quot;</span><br><span class="line">  nginx binary file: &quot;/home/admin/nginx/sbin/nginx&quot;</span><br><span class="line">  nginx modules path: &quot;/home/admin/nginx/modules&quot;</span><br><span class="line">  nginx configuration prefix: &quot;/home/admin/nginx/conf&quot;</span><br><span class="line">  nginx configuration file: &quot;/home/admin/nginx/conf/nginx.conf&quot;</span><br><span class="line">  nginx pid file: &quot;/home/admin/nginx/logs/nginx.pid&quot;</span><br><span class="line">  nginx error log file: &quot;/home/admin/nginx/logs/error.log&quot;</span><br><span class="line">  nginx http access log file: &quot;/home/admin/nginx/logs/access.log&quot;</span><br><span class="line">  nginx http client request body temporary files: &quot;client_body_temp&quot;</span><br><span class="line">  nginx http proxy temporary files: &quot;proxy_temp&quot;</span><br><span class="line">  nginx http fastcgi temporary files: &quot;fastcgi_temp&quot;</span><br><span class="line">  nginx http uwsgi temporary files: &quot;uwsgi_temp&quot;</span><br><span class="line">  nginx http scgi temporary files: &quot;scgi_temp&quot;</span><br></pre></td></tr></table></figure>
-
-<p>编译</p>
-<pre><code>make</code></pre><p>安装</p>
-<p>  make install</p>
-<h5 id="设置权限"><a href="#设置权限" class="headerlink" title="设置权限"></a>设置权限</h5><p>因为Linux设置普通用户，不能占用1024一下的端口，直接启动nginx会出现权限不足的错误。将nginx分配给root用户，在分配特殊权限。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown root nginx</span><br><span class="line">sudo chmod u+s nginx</span><br></pre></td></tr></table></figure>
-
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>刚开始做这个的时候，以为lua真的很强大，可以代替Java，PHP做web开发语言。结果我深入了解一下，很快就打了自己的脸了。<code>resty.upload</code>只能获取form-data第一个input，无论是文件还是text类型，只会返回这个。如果你想获取到文件和表单中其他参数，那你就要使用ngx.socket.tcp 获取原生TCP，自己手动解析HTTP文本协议，获取文件数据和表达参数。我之前真的看过一位老哥手动去解析TCP文本，获取文件参数，真的强啊!。 原生类库不支持创建文件夹，创建文件要调用系统命令,这样要进程上下文切换，性能消耗特别大，或者就是使用<code>lfs</code>类库，功能很简单。</p>
 
       
     </div>
@@ -625,7 +553,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+            <a href="/tags/Lua/" rel="tag"># Lua</a>
           
         </div>
       
@@ -659,8 +587,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/14/Nodejs实现socks5协议/" rel="next" title="使用nodejs实现socks5协议">
-                <i class="fa fa-chevron-left"></i> 使用nodejs实现socks5协议
+              <a href="/2019/09/13/Spring使用xml启动源码解析/" rel="next" title="Spring使用xml启动源码解析">
+                <i class="fa fa-chevron-left"></i> Spring使用xml启动源码解析
               </a>
             
           </div>
@@ -668,10 +596,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/19/npm全局安装权限不足处理/" rel="prev" title="npm全局安装权限不足">
-                npm全局安装权限不足 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -846,7 +770,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用系统二进制源方式安装"><span class="nav-number">1.</span> <span class="nav-text">使用系统二进制源方式安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译安装"><span class="nav-number">2.</span> <span class="nav-text">编译安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#编译环境准备"><span class="nav-number">2.0.1.</span> <span class="nav-text">编译环境准备</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编译选项"><span class="nav-number">2.0.2.</span> <span class="nav-text">编译选项</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编译安装-1"><span class="nav-number">2.0.3.</span> <span class="nav-text">编译安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设置权限"><span class="nav-number">2.0.4.</span> <span class="nav-text">设置权限</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#上传代码"><span class="nav-number">1.</span> <span class="nav-text">上传代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -1066,9 +990,9 @@
 
 <script>
   var disqus_config = function() {
-    this.page.url = "https://shenyifengtk.github.io/2019/07/19/Linux安装Nginx正确方式/";
-    this.page.identifier = "2019/07/19/Linux安装Nginx正确方式/";
-    this.page.title = 'Linux安装Nginx正确方式';
+    this.page.url = "https://shenyifengtk.github.io/2020/04/15/Openresty Lua实现文件上传/";
+    this.page.identifier = "2020/04/15/Openresty Lua实现文件上传/";
+    this.page.title = 'Openresty Lua实现文件上传';
     };
   function loadComments() {
     var d = document, s = d.createElement('script');
