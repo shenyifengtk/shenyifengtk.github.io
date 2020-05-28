@@ -98,18 +98,19 @@
 
 
 
-  <meta name="description" content="有好久没有写过博客了，已经记不清上次发博客是什么时候了。去年到现在经历很多事，尝试了好多新事物，变化也挺多的。一次偶然机会了解到lua这门新语言，自己简单实现文件上传功能。  上传代码思路： 根据上传URL来命名文件，使用OpenResty resty.upload模块获取上传文件，调用lua原生类库io.open(filename,&amp;#39;w+&amp;#39;)刷入硬盘。具体实现代码 123456">
-<meta name="keywords" content="Lua">
+  <meta name="description" content="使用命令源方式安装首先更新软件源链接，获取最新软件  sudo apt update  安装mariadb 就是MySQL 社区版本  sudo apt install -y mariadb-server  数据库第一次设置刚刚安装MySQL并没有设置root密码，访问权限，需要运行安全脚本 mysql_secure_installation  sudo  mysql_secure_install">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Openresty Lua实现文件上传">
-<meta property="og:url" content="https://shenyifengtk.github.io/2020/04/15/Openresty Lua实现文件上传/index.html">
+<meta property="og:title" content="Ubuntu 安装MySQL">
+<meta property="og:url" content="https://shenyifengtk.github.io/2020/05/28/Ubuntu-安装MySQL/index.html">
 <meta property="og:site_name" content="神易风 blog">
-<meta property="og:description" content="有好久没有写过博客了，已经记不清上次发博客是什么时候了。去年到现在经历很多事，尝试了好多新事物，变化也挺多的。一次偶然机会了解到lua这门新语言，自己简单实现文件上传功能。  上传代码思路： 根据上传URL来命名文件，使用OpenResty resty.upload模块获取上传文件，调用lua原生类库io.open(filename,&amp;#39;w+&amp;#39;)刷入硬盘。具体实现代码 123456">
+<meta property="og:description" content="使用命令源方式安装首先更新软件源链接，获取最新软件  sudo apt update  安装mariadb 就是MySQL 社区版本  sudo apt install -y mariadb-server  数据库第一次设置刚刚安装MySQL并没有设置root密码，访问权限，需要运行安全脚本 mysql_secure_installation  sudo  mysql_secure_install">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-19T08:22:34.937Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/27/tEhBfP.png">
+<meta property="og:updated_time" content="2020-05-28T14:16:41.846Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Openresty Lua实现文件上传">
-<meta name="twitter:description" content="有好久没有写过博客了，已经记不清上次发博客是什么时候了。去年到现在经历很多事，尝试了好多新事物，变化也挺多的。一次偶然机会了解到lua这门新语言，自己简单实现文件上传功能。  上传代码思路： 根据上传URL来命名文件，使用OpenResty resty.upload模块获取上传文件，调用lua原生类库io.open(filename,&amp;#39;w+&amp;#39;)刷入硬盘。具体实现代码 123456">
+<meta name="twitter:title" content="Ubuntu 安装MySQL">
+<meta name="twitter:description" content="使用命令源方式安装首先更新软件源链接，获取最新软件  sudo apt update  安装mariadb 就是MySQL 社区版本  sudo apt install -y mariadb-server  数据库第一次设置刚刚安装MySQL并没有设置root密码，访问权限，需要运行安全脚本 mysql_secure_installation  sudo  mysql_secure_install">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/05/27/tEhBfP.png">
 
 
 
@@ -117,7 +118,7 @@
 
   
   
-  <link rel="canonical" href="https://shenyifengtk.github.io/2020/04/15/Openresty Lua实现文件上传/">
+  <link rel="canonical" href="https://shenyifengtk.github.io/2020/05/28/Ubuntu-安装MySQL/">
 
 
 
@@ -127,7 +128,7 @@
   };
 </script>
 
-  <title>Openresty Lua实现文件上传 | 神易风 blog</title>
+  <title>Ubuntu 安装MySQL | 神易风 blog</title>
   
 
 
@@ -353,7 +354,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2020/04/15/Openresty Lua实现文件上传/">
+    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2020/05/28/Ubuntu-安装MySQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="神易峰">
@@ -370,7 +371,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Openresty Lua实现文件上传
+          <h1 class="post-title" itemprop="name headline">Ubuntu 安装MySQL
 
               
             
@@ -396,24 +397,12 @@
                 
               
 
-              <time title="创建时间：2020-04-15 22:27:37" itemprop="dateCreated datePublished" datetime="2020-04-15T22:27:37+08:00">2020-04-15</time>
+              <time title="创建时间：2020-05-28 22:15:00 / 修改时间：22:16:41" itemprop="dateCreated datePublished" datetime="2020-05-28T22:15:00+08:00">2020-05-28</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-04-19 16:22:34" itemprop="dateModified" datetime="2020-04-19T16:22:34+08:00">2020-04-19</time>
               
             
           </span>
@@ -430,14 +419,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/Lua/" itemprop="url" rel="index"><span itemprop="name">Lua</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -456,8 +445,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/04/15/Openresty Lua实现文件上传/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/15/Openresty Lua实现文件上传/" itemprop="commentCount"></span>
+                <a href="/2020/05/28/Ubuntu-安装MySQL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/05/28/Ubuntu-安装MySQL/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -486,7 +475,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2k</span>
+                <span title="本文字数">1.2k</span>
               
 
               
@@ -500,7 +489,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">2 分钟</span>
+                <span title="阅读时长">1 分钟</span>
               
             </div>
           
@@ -520,15 +509,52 @@
       
 
       
-        <blockquote>
-<p>有好久没有写过博客了，已经记不清上次发博客是什么时候了。去年到现在经历很多事，尝试了好多新事物，变化也挺多的。一次偶然机会了解到lua这门新语言，自己简单实现文件上传功能。</p>
+        <h3 id="使用命令源方式安装"><a href="#使用命令源方式安装" class="headerlink" title="使用命令源方式安装"></a>使用命令源方式安装</h3><p>首先更新软件源链接，获取最新软件</p>
+<blockquote>
+<p>sudo apt update</p>
 </blockquote>
-<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>思路： 根据上传URL来命名文件，使用OpenResty resty.upload模块获取上传文件，调用lua原生类库<code>io.open(filename,&#39;w+&#39;)</code>刷入硬盘。具体实现代码</p>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> cjson = <span class="built_in">require</span> <span class="string">"cjson"</span></span><br><span class="line"><span class="keyword">local</span> result = &#123;&#125;</span><br><span class="line"><span class="keyword">local</span> upload = <span class="built_in">require</span> <span class="string">"resty.upload"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 获取url 文件名</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_filename</span><span class="params">(url)</span></span></span><br><span class="line">	<span class="keyword">local</span> filename = <span class="built_in">string</span>.<span class="built_in">match</span>(url,<span class="string">'.+/([^/]*%.%w+)$'</span>)</span><br><span class="line"><span class="keyword">return</span> filename</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 错误响应</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">err</span><span class="params">(code,description)</span></span></span><br><span class="line">    result.code = code</span><br><span class="line">    result.description = description</span><br><span class="line">    ngx.header[<span class="string">'Content-Type'</span>] = <span class="string">'application/json'</span></span><br><span class="line">    <span class="keyword">return</span> cjson.encode(result)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ok</span><span class="params">(data)</span></span></span><br><span class="line">	result.data = data</span><br><span class="line">	result.code = <span class="number">200</span></span><br><span class="line">	ngx.header[<span class="string">'Content-Type'</span>] = <span class="string">'application/json'</span></span><br><span class="line">	<span class="keyword">return</span> cjson.encode(result)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--上传文件</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">upload_file</span><span class="params">()</span></span></span><br><span class="line">	<span class="keyword">local</span> chunk_size = <span class="number">4096</span></span><br><span class="line">	<span class="keyword">local</span> form , err = upload:new(chunk_size)</span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">not</span> form <span class="keyword">then</span></span><br><span class="line">	ngx.<span class="built_in">log</span>(ngx.ERR,<span class="string">'failed to new upload: '</span>,err)</span><br><span class="line">	ngx.<span class="built_in">exit</span>(ngx.HTTP_INTERNAL_SERVER_ERROR)</span><br><span class="line"> 	<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">local</span> file</span><br><span class="line">	<span class="keyword">local</span> filename = get_filename(ngx.var.uri)</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span> </span><br><span class="line">		<span class="keyword">local</span> typ,res,err = form:<span class="built_in">read</span>()</span><br><span class="line">		<span class="keyword">if</span> <span class="keyword">not</span> typ <span class="keyword">then</span></span><br><span class="line">		ngx.say(err(<span class="number">504</span>,<span class="string">'failed to read '</span>.. err))</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> typ == <span class="string">'header'</span> <span class="keyword">then</span> </span><br><span class="line">		file = <span class="built_in">io</span>.<span class="built_in">open</span>(<span class="string">'/usr/local/openresty/nginx/html/lua/'</span> .. filename,<span class="string">'w+'</span>)	</span><br><span class="line">		<span class="keyword">elseif</span> typ == <span class="string">'body'</span> <span class="keyword">then</span>	</span><br><span class="line">		file:<span class="built_in">write</span>(res)</span><br><span class="line">		<span class="keyword">elseif</span> typ == <span class="string">'part_end'</span> <span class="keyword">then</span></span><br><span class="line">		file:<span class="built_in">close</span>()</span><br><span class="line">		file = <span class="literal">nil</span></span><br><span class="line">		ngx.say(ok(<span class="string">'upload success'</span>))</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">		<span class="keyword">elseif</span> typ == <span class="string">'eof'</span> <span class="keyword">then</span></span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> http_method = ngx.var.request_method</span><br><span class="line"><span class="keyword">if</span>  http_method == <span class="string">'POST'</span> <span class="keyword">then</span></span><br><span class="line">	upload_file()</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    ngx.say(err(<span class="number">405</span>,<span class="string">'not supper method upload file'</span>))</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>安装mariadb 就是MySQL 社区版本</p>
+<blockquote>
+<p>sudo apt install -y mariadb-server</p>
+</blockquote>
+<h3 id="数据库第一次设置"><a href="#数据库第一次设置" class="headerlink" title="数据库第一次设置"></a>数据库第一次设置</h3><p>刚刚安装MySQL并没有设置root密码，访问权限，需要运行安全脚本 <code>mysql_secure_installation</code></p>
+<blockquote>
+<p>sudo  mysql_secure_installation</p>
+</blockquote>
+<p>脚本操作步骤</p>
+<ul>
+<li>输入<code>enter</code> 进入密码设置</li>
+<li>选择 Y设置新密码</li>
+<li>是否选择删除其他MySQL用户</li>
+<li>是否只允许系统root 用户登录 MySQL root账号</li>
+<li>是否删除测试数据库</li>
+<li>是否重启数据库<br><img src="https://s1.ax1x.com/2020/05/27/tEhBfP.png" alt="示图1"></li>
+</ul>
+<h3 id="设置数据库权限"><a href="#设置数据库权限" class="headerlink" title="设置数据库权限"></a>设置数据库权限</h3><p>在Ubuntu系统上运行 的MariaDB 10.1，默认情况下，将 MariaDB  root用户设置是使用unix_socket插件认证登录的，而不是需要认证密码。这样做可以大大增强了安全性，但是要使用一些外部工具管理MySQL变得非常困难。<br>有两种方式修改root用户认证，直接去修改<code>/etc/mysql/debian.cnf</code>文件，但是每次软件更新的时候，又会重复覆盖文件，用处不是很大。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Automatically generated for Debian scripts. DO NOT TOUCH!</span><br><span class="line">[client]</span><br><span class="line">host     = localhost</span><br><span class="line">user     = root</span><br><span class="line">password =</span><br><span class="line">socket   = /var/run/mysqld/mysqld.sock</span><br><span class="line">[mysql_upgrade]</span><br><span class="line">host     = localhost</span><br><span class="line">user     = root</span><br><span class="line">password =</span><br><span class="line">socket   = /var/run/mysqld/mysqld.sock</span><br><span class="line">~</span><br></pre></td></tr></table></figure>
 
-<h4 id="Nginx配置"><a href="#Nginx配置" class="headerlink" title="Nginx配置"></a>Nginx配置</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> /lua &#123;</span><br><span class="line">            <span class="attribute">default_type</span>  text/html;</span><br><span class="line">            <span class="attribute">client_max_body_size</span> <span class="number">10m</span>;</span><br><span class="line">            <span class="attribute">content_by_lua_file</span> upload.lua;</span><br></pre></td></tr></table></figure>
-
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>刚开始做这个的时候，以为lua真的很强大，可以代替Java，PHP做web开发语言。结果我深入了解一下，很快就打了自己的脸了。<code>resty.upload</code>只能获取form-data第一个input，无论是文件还是text类型，只会返回这个。如果你想获取到文件和表单中其他参数，那你就要使用ngx.socket.tcp 获取原生TCP，自己手动解析HTTP文本协议，获取文件数据和表达参数。我之前真的看过一位老哥手动去解析TCP文本，获取文件参数，真的强啊!。 原生类库不支持创建文件夹，创建文件要调用系统命令,这样要进程上下文切换，性能消耗特别大，或者就是使用<code>lfs</code>类库，功能很简单。</p>
+<p>使用SQL语言修改访问用户权限<br>使用root 用户登录MySQL root账号</p>
+<blockquote>
+<p>sudo mysql </p>
+</blockquote>
+<p>执行语句</p>
+<blockquote>
+<p>MariaDB [(none)]&gt; GRANT ALL ON *.* TO ‘user’@’localhost’ IDENTIFIED BY ‘password’ WITH GRANT OPTION;</p>
+</blockquote>
+<p>*.* 数据库名，. 表示所有库<br>user 授予登录权限用户,这里可以写root或者其他用户<br>localhost 运行登录客户端ip地址，这里只允许本地登录<br>password 登录密码 </p>
+<p>刷新设置保存保存到数据库中</p>
+<blockquote>
+<p>MariaDB [(none)]&gt; FLUSH PRIVILEGES;</p>
+</blockquote>
+<p>退出MySQL</p>
+<blockquote>
+<p>MariaDB [(none)]&gt; exit</p>
+</blockquote>
+<h3 id="验证登录"><a href="#验证登录" class="headerlink" title="验证登录"></a>验证登录</h3><p>使用普通用户执行登录命令</p>
+<blockquote>
+<p>mysql -uroot -p </p>
+</blockquote>
+<p>登录成功，说明设置成功</p>
 
       
     </div>
@@ -549,15 +575,6 @@
     
 
     <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/Lua/" rel="tag"># Lua</a>
-          
-        </div>
       
 
       
@@ -589,8 +606,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/13/Spring使用xml启动源码解析/" rel="next" title="Spring使用xml启动源码解析">
-                <i class="fa fa-chevron-left"></i> Spring使用xml启动源码解析
+              <a href="/2020/05/10/HashMap源码解析/" rel="next" title="HashMap源码解析">
+                <i class="fa fa-chevron-left"></i> HashMap源码解析
               </a>
             
           </div>
@@ -598,10 +615,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/05/10/HashMap源码解析/" rel="prev" title="HashMap源码解析">
-                HashMap源码解析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -784,7 +797,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#上传代码"><span class="nav-number">1.</span> <span class="nav-text">上传代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nginx配置"><span class="nav-number">2.</span> <span class="nav-text">Nginx配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用命令源方式安装"><span class="nav-number">1.</span> <span class="nav-text">使用命令源方式安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库第一次设置"><span class="nav-number">2.</span> <span class="nav-text">数据库第一次设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置数据库权限"><span class="nav-number">3.</span> <span class="nav-text">设置数据库权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证登录"><span class="nav-number">4.</span> <span class="nav-text">验证登录</span></a></li></ol></div>
             
 
           </div>
@@ -1004,9 +1017,9 @@
 
 <script>
   var disqus_config = function() {
-    this.page.url = "https://shenyifengtk.github.io/2020/04/15/Openresty Lua实现文件上传/";
-    this.page.identifier = "2020/04/15/Openresty Lua实现文件上传/";
-    this.page.title = 'Openresty Lua实现文件上传';
+    this.page.url = "https://shenyifengtk.github.io/2020/05/28/Ubuntu-安装MySQL/";
+    this.page.identifier = "2020/05/28/Ubuntu-安装MySQL/";
+    this.page.title = 'Ubuntu 安装MySQL';
     };
   function loadComments() {
     var d = document, s = d.createElement('script');
