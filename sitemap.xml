@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://shenyifengtk.github.io/2020/06/16/AbstractQueuedSynchronizer%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/</loc>
+    
+    <lastmod>2020-06-16T02:42:20.705Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://shenyifengtk.github.io/2020/06/08/%E7%BA%BF%E7%A8%8B%E6%B1%A0ThreadPoolExecutor-%E4%BA%86%E8%A7%A3/</loc>
     
     <lastmod>2020-06-09T15:11:01.613Z</lastmod>
