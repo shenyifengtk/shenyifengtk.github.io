@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="现在有个需求对所有学生分数进行排名，并且列出名次。刚看到这个需求，我有点懵逼，完全没有思路😂，为什么难一点需求，我就不会做呢😔 去网上查询资料,把所有实现都列出来，全部都要学会。 数据库准备创建一个分数表s_score 123456CREATE TABLE `s_score`  (  `id` int NOT NULL AUTO_INCREMENT,  `score` int NOT NULL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL排名函数实现">
+<meta property="og:url" content="https://shenyifengtk.github.io/2020/07/22/MySQL排名函数实现/index.html">
+<meta property="og:site_name" content="神易风 blog">
+<meta property="og:description" content="现在有个需求对所有学生分数进行排名，并且列出名次。刚看到这个需求，我有点懵逼，完全没有思路😂，为什么难一点需求，我就不会做呢😔 去网上查询资料,把所有实现都列出来，全部都要学会。 数据库准备创建一个分数表s_score 123456CREATE TABLE `s_score`  (  `id` int NOT NULL AUTO_INCREMENT,  `score` int NOT NULL">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-22T06:59:04.410Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL排名函数实现">
+<meta name="twitter:description" content="现在有个需求对所有学生分数进行排名，并且列出名次。刚看到这个需求，我有点懵逼，完全没有思路😂，为什么难一点需求，我就不会做呢😔 去网上查询资料,把所有实现都列出来，全部都要学会。 数据库准备创建一个分数表s_score 123456CREATE TABLE `s_score`  (  `id` int NOT NULL AUTO_INCREMENT,  `score` int NOT NULL">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://shenyifengtk.github.io/2020/07/22/MySQL排名函数实现/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>MySQL排名函数实现 | 神易风 blog</title>
+  
+
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111663733-2"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !false) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-111663733-2');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">神易风 blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">求知若饥，虚心若愚</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2020/07/22/MySQL排名函数实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="神易峰">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神易风 blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL排名函数实现
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-07-22 14:51:00 / 修改时间：14:59:04" itemprop="dateCreated datePublished" datetime="2020-07-22T14:51:00+08:00">2020-07-22</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/SQL/" itemprop="url" rel="index"><span itemprop="name">SQL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/07/22/MySQL排名函数实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/22/MySQL排名函数实现/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.9k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">3 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>现在有个需求对所有学生分数进行排名，并且列出名次。刚看到这个需求，我有点懵逼，完全没有思路😂，为什么难一点需求，我就不会做呢😔 去网上查询资料,把所有实现都列出来，全部都要学会。</p>
+<h3 id="数据库准备"><a href="#数据库准备" class="headerlink" title="数据库准备"></a>数据库准备</h3><p>创建一个分数表s_score</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`s_score`</span>  (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`score`</span> <span class="built_in">int</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>插入数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`s_score`</span> (<span class="string">`name`</span>, <span class="string">`score`</span>) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">'张三'</span>, <span class="number">80</span>),</span><br><span class="line">(<span class="string">'小明'</span>, <span class="number">90</span>),</span><br><span class="line">(<span class="string">'小红'</span>, <span class="number">60</span>),</span><br><span class="line">(<span class="string">'李四'</span>, <span class="number">70</span>),</span><br><span class="line">(<span class="string">'赵武'</span>, <span class="number">80</span>),</span><br><span class="line">(<span class="string">'梁晨'</span>, <span class="number">87</span>),</span><br><span class="line">(<span class="string">'小绿'</span>, <span class="number">69</span>),</span><br><span class="line">(<span class="string">'威廉'</span>, <span class="number">69</span>),</span><br><span class="line">(<span class="string">'大卫'</span>, <span class="number">91</span>),</span><br><span class="line">(<span class="string">'王五'</span>, <span class="number">96</span>),</span><br><span class="line">(<span class="string">'赵六'</span>, <span class="number">96</span>),</span><br><span class="line">(<span class="string">'小五'</span>, <span class="number">80</span>),</span><br><span class="line">(<span class="string">'小龙'</span>, <span class="number">88</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="普通实现"><a href="#普通实现" class="headerlink" title="普通实现"></a>普通实现</h3><p>在MySQL8.0推出Rank排名函数RANK，完全支持这种需求，但是必须MySQL8.0 以上版本才支持这个特性。8.0以下的版本有什么方法实现呢，使用用户变量，记录名次。<br>用户变量：以”<code>@</code>“开始，形式为”<code>@var_name</code>“,以区分用户变量及列名。它可以是任何随机的，复合的标量表达式，只要其中没有列指定。下面写一个小例子，展示如何使用用户变量</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> @a:=<span class="number">1</span> a,@b:=@a+<span class="number">1</span> b</span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<table>
+<thead>
+<tr>
+<th align="center">a</th>
+<th align="center">b</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">2</td>
+</tr>
+</tbody></table>
+<p>:= 是赋值的意思，与编程语言赋值有点区别。下面开始展示使用简单SQL实现RANK排名函数效果</p>
+<h4 id="用户变量简单实现名次显示"><a href="#用户变量简单实现名次显示" class="headerlink" title="用户变量简单实现名次显示"></a>用户变量简单实现名次显示</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">name</span>,score, @<span class="keyword">rank</span>:=@<span class="keyword">rank</span>+<span class="number">1</span> <span class="string">`rank`</span> <span class="keyword">from</span> s_score s,(<span class="keyword">select</span> @<span class="keyword">rank</span>:=<span class="number">0</span>) q <span class="keyword">ORDER</span> <span class="keyword">BY</span> score <span class="keyword">desc</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">name</th>
+<th align="center">score</th>
+<th align="center">rank</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">赵六</td>
+<td align="center">96</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">王五</td>
+<td align="center">96</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">大卫</td>
+<td align="center">91</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">小明</td>
+<td align="center">90</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">小龙</td>
+<td align="center">88</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">梁晨</td>
+<td align="center">87</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">小五</td>
+<td align="center">80</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">张三</td>
+<td align="center">80</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">赵武</td>
+<td align="center">80</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td align="center">李四</td>
+<td align="center">70</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">威廉</td>
+<td align="center">69</td>
+<td align="center">11</td>
+</tr>
+<tr>
+<td align="center">小绿</td>
+<td align="center">69</td>
+<td align="center">12</td>
+</tr>
+<tr>
+<td align="center">小红</td>
+<td align="center">60</td>
+<td align="center">13</td>
+</tr>
+</tbody></table>
+<h4 id="并排名次展示"><a href="#并排名次展示" class="headerlink" title="并排名次展示"></a>并排名次展示</h4><p>现在还有一个问题，出现分数相同，并列排名，名次应该相同。我们使用一个temp变量来记录前一个分数值，判断前面分数是否与当前相等，相等直接返回上一个排名情况，否则排名+1。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,score,<span class="keyword">case</span> <span class="keyword">when</span> @temp_score=score <span class="keyword">then</span> @<span class="keyword">rank</span> <span class="keyword">when</span> @temp_score:=score <span class="keyword">then</span> @<span class="keyword">rank</span>:=@<span class="keyword">rank</span>+<span class="number">1</span> <span class="keyword">END</span> </span><br><span class="line">   <span class="string">`rank`</span> <span class="keyword">from</span> s_score s,(<span class="keyword">select</span> @<span class="keyword">rank</span>:=<span class="number">0</span>,@temp_score:=<span class="literal">NULL</span>) q <span class="keyword">ORDER</span> <span class="keyword">BY</span> score <span class="keyword">desc</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">name</th>
+<th align="center">score</th>
+<th align="center">rank</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">赵六</td>
+<td align="center">96</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">王五</td>
+<td align="center">96</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">大卫</td>
+<td align="center">91</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">小明</td>
+<td align="center">90</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">小龙</td>
+<td align="center">88</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">梁晨</td>
+<td align="center">87</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">小五</td>
+<td align="center">80</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">张三</td>
+<td align="center">80</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">赵武</td>
+<td align="center">80</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">李四</td>
+<td align="center">70</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">威廉</td>
+<td align="center">69</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">小绿</td>
+<td align="center">69</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">小红</td>
+<td align="center">60</td>
+<td align="center">9</td>
+</tr>
+</tbody></table>
+<h4 id="并排名次跳过"><a href="#并排名次跳过" class="headerlink" title="并排名次跳过"></a>并排名次跳过</h4><p>如果出现并列排名，下一个名次将自动跳过，比如出现两个并列第一，91应该变成第三名了，名次和人数相对应。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">name</span>,score,<span class="keyword">rank</span> <span class="keyword">from</span> (</span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">name</span> ,score,@<span class="keyword">rank</span> :=<span class="keyword">IF</span>( @temp_score = score, @<span class="keyword">rank</span>, @rank_incr ) <span class="string">`rank`</span>,@rank_incr := @rank_incr + <span class="number">1</span>,</span><br><span class="line">	@temp_score := score <span class="keyword">FROM</span> score s,(<span class="keyword">SELECT</span>@<span class="keyword">rank</span> := <span class="number">0</span>,@temp_rank := <span class="literal">NULL</span>,@rank_incr := <span class="number">1</span> ) q <span class="keyword">ORDER</span> <span class="keyword">BY</span> score <span class="keyword">DESC</span>) a</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">name</th>
+<th align="center">score</th>
+<th align="center">rank</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">赵六</td>
+<td align="center">96</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">王五</td>
+<td align="center">96</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">大卫</td>
+<td align="center">91</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">小明</td>
+<td align="center">90</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">小龙</td>
+<td align="center">88</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">梁晨</td>
+<td align="center">87</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">小五</td>
+<td align="center">80</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">张三</td>
+<td align="center">80</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">赵武</td>
+<td align="center">80</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">李四</td>
+<td align="center">70</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">威廉</td>
+<td align="center">69</td>
+<td align="center">11</td>
+</tr>
+<tr>
+<td align="center">小绿</td>
+<td align="center">69</td>
+<td align="center">11</td>
+</tr>
+<tr>
+<td align="center">小红</td>
+<td align="center">60</td>
+<td align="center">13</td>
+</tr>
+</tbody></table>
+<h3 id="使用SQL窗口函数"><a href="#使用SQL窗口函数" class="headerlink" title="使用SQL窗口函数"></a>使用SQL窗口函数</h3><p>窗口函数的基本语法如下：</p>
+<blockquote>
+<p>select 排序函数/聚合函数 over (&lt;partition by …&gt;  分区字段   order by  排序字段)</p>
+</blockquote>
+<p>注意over 后面有一个空格的，这个语法有点蛋疼，我自己试了十几次才书写成功。<br>根据维基百科解释：<strong>窗口函数</strong>允许在当前记录之前和之后访问记录中的数据。窗口函数定义一<em>帧</em>或一列<em>窗口</em>，其中当前行周围具有给定的长度，并跨窗口中的数据集执行计算。可以这样理解，窗口就是数据集合，函数就是计算数据方法。</p>
+<p>partiton by是可选的。如果不使用partition by，那么就是将整张表作为一个集合，最后使用排序函数得到的就是每一条记录根据排序列的排序编号。<br>排序函数主要有rank()、dense_rank、row_number，他们主要区别：</p>
+<ul>
+<li>rank():   对同一个字段排序，出现相同时，会并列排名，并且会出现排名间隙。</li>
+<li>dense_rank() :  对同一个字段排序，出现相同时，会出现并列排名，排名连续的</li>
+<li>row_number():  对同一个字段排序，排名是联系的，即使出现相同，不会并列排名次<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,score, <span class="keyword">RANK</span>() <span class="keyword">over</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> score <span class="keyword">DESC</span>) <span class="string">`rank`</span>,ROW_NUMBER() <span class="keyword">over</span> (<span class="keyword">order</span> <span class="keyword">by</span> score <span class="keyword">DESC</span>) <span class="string">`row`</span>,</span><br><span class="line"><span class="keyword">DENSE_RANK</span>()<span class="keyword">over</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> score <span class="keyword">DESC</span>) <span class="string">`dense`</span> <span class="keyword">from</span> s_score</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">name</th>
+<th align="center">score</th>
+<th align="center">rank</th>
+<th align="center">row</th>
+<th align="center">dense</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">赵六</td>
+<td align="center">96</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">王五</td>
+<td align="center">96</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">大卫</td>
+<td align="center">91</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">小明</td>
+<td align="center">90</td>
+<td align="center">4</td>
+<td align="center">4</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">小龙</td>
+<td align="center">88</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">梁晨</td>
+<td align="center">87</td>
+<td align="center">6</td>
+<td align="center">6</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">赵武</td>
+<td align="center">80</td>
+<td align="center">7</td>
+<td align="center">7</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">小五</td>
+<td align="center">80</td>
+<td align="center">7</td>
+<td align="center">8</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">张三</td>
+<td align="center">80</td>
+<td align="center">7</td>
+<td align="center">9</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">李四</td>
+<td align="center">70</td>
+<td align="center">10</td>
+<td align="center">10</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">小绿</td>
+<td align="center">69</td>
+<td align="center">11</td>
+<td align="center">11</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">威廉</td>
+<td align="center">69</td>
+<td align="center">11</td>
+<td align="center">12</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">小红</td>
+<td align="center">60</td>
+<td align="center">13</td>
+<td align="center">13</td>
+<td align="center">9</td>
+</tr>
+</tbody></table>
+<p>以上就是排序名次全部实现方式了，还有其他实现方式，麻烦在评论里补充一下。</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://cloud.tencent.com/developer/article/1562954" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1562954</a><br><a href="https://www.jianshu.com/p/bb1b72a1623e" target="_blank" rel="noopener">https://www.jianshu.com/p/bb1b72a1623e</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/09/VM-内存模型和垃圾回收网络摘要总结/" rel="next" title="VM 内存模型和垃圾回收网络摘要总结">
+                <i class="fa fa-chevron-left"></i> VM 内存模型和垃圾回收网络摘要总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="神易峰">
+            
+              <p class="site-author-name" itemprop="name">神易峰</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库准备"><span class="nav-number">1.</span> <span class="nav-text">数据库准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#普通实现"><span class="nav-number">2.</span> <span class="nav-text">普通实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#用户变量简单实现名次显示"><span class="nav-number">2.1.</span> <span class="nav-text">用户变量简单实现名次显示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并排名次展示"><span class="nav-number">2.2.</span> <span class="nav-text">并排名次展示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并排名次跳过"><span class="nav-number">2.3.</span> <span class="nav-text">并排名次跳过</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用SQL窗口函数"><span class="nav-number">3.</span> <span class="nav-text">使用SQL窗口函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">神易峰</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">136k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">2:04</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.2</div>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shenyifengtk.github.io/2020/07/22/MySQL排名函数实现/";
+    this.page.identifier = "2020/07/22/MySQL排名函数实现/";
+    this.page.title = 'MySQL排名函数实现';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "box";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "bottomCenter";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+        flOptions.iconStyle = "box";
+      
+        flOptions.boxForm = "horizontal";
+      
+        flOptions.position = "middleRight";
+      
+        flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
