@@ -98,17 +98,18 @@
 
 
 
-  <meta name="description" content="都2021了，学会用docker 来构建软件开发吧，快速构建环境，容器比虚拟机更加轻量化，拥有诸多好处。下面我使用docker安装运行MySQL例子，为大家演示docker使用方法。 搜索镜像 docker search mysql  123456789101112131415161718192021222324252627PS C:\Users\syf&amp;gt; docker search mys">
+  <meta name="description" content="Docker Compose 是Docker 官方的开源项目， 负责实现对 Docker 容器集群的快速编排。通过使用一个 docker-compose.yml模板文件来定义一个或者多个容器，满足一个软件应用运行环境。Docker Compose 有三大使用场景  Dockerfile 文件构建容器，定制镜像 docker-compose.yml  构建软件环境 docker-compose 启动">
+<meta name="keywords" content="Docker,Docker Compose">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker安装MySQL">
-<meta property="og:url" content="https://shenyifengtk.github.io/2021/02/01/docker安装MySQL/index.html">
+<meta property="og:title" content="Docker Compose 简单使用">
+<meta property="og:url" content="https://shenyifengtk.github.io/2021/06/26/Docker-Compose-简单使用/index.html">
 <meta property="og:site_name" content="神易风 blog">
-<meta property="og:description" content="都2021了，学会用docker 来构建软件开发吧，快速构建环境，容器比虚拟机更加轻量化，拥有诸多好处。下面我使用docker安装运行MySQL例子，为大家演示docker使用方法。 搜索镜像 docker search mysql  123456789101112131415161718192021222324252627PS C:\Users\syf&amp;gt; docker search mys">
+<meta property="og:description" content="Docker Compose 是Docker 官方的开源项目， 负责实现对 Docker 容器集群的快速编排。通过使用一个 docker-compose.yml模板文件来定义一个或者多个容器，满足一个软件应用运行环境。Docker Compose 有三大使用场景  Dockerfile 文件构建容器，定制镜像 docker-compose.yml  构建软件环境 docker-compose 启动">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-02-01T15:02:45.978Z">
+<meta property="og:updated_time" content="2021-06-26T14:44:58.366Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="docker安装MySQL">
-<meta name="twitter:description" content="都2021了，学会用docker 来构建软件开发吧，快速构建环境，容器比虚拟机更加轻量化，拥有诸多好处。下面我使用docker安装运行MySQL例子，为大家演示docker使用方法。 搜索镜像 docker search mysql  123456789101112131415161718192021222324252627PS C:\Users\syf&amp;gt; docker search mys">
+<meta name="twitter:title" content="Docker Compose 简单使用">
+<meta name="twitter:description" content="Docker Compose 是Docker 官方的开源项目， 负责实现对 Docker 容器集群的快速编排。通过使用一个 docker-compose.yml模板文件来定义一个或者多个容器，满足一个软件应用运行环境。Docker Compose 有三大使用场景  Dockerfile 文件构建容器，定制镜像 docker-compose.yml  构建软件环境 docker-compose 启动">
 
 
 
@@ -116,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://shenyifengtk.github.io/2021/02/01/docker安装MySQL/">
+  <link rel="canonical" href="https://shenyifengtk.github.io/2021/06/26/Docker-Compose-简单使用/">
 
 
 
@@ -126,7 +127,7 @@
   };
 </script>
 
-  <title>docker安装MySQL | 神易风 blog</title>
+  <title>Docker Compose 简单使用 | 神易风 blog</title>
   
 
 
@@ -352,7 +353,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2021/02/01/docker安装MySQL/">
+    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2021/06/26/Docker-Compose-简单使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="神易峰">
@@ -369,7 +370,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">docker安装MySQL
+          <h1 class="post-title" itemprop="name headline">Docker Compose 简单使用
 
               
             
@@ -395,7 +396,7 @@
                 
               
 
-              <time title="创建时间：2021-02-01 22:29:00 / 修改时间：23:02:45" itemprop="dateCreated datePublished" datetime="2021-02-01T22:29:00+08:00">2021-02-01</time>
+              <time title="创建时间：2021-06-26 22:43:00 / 修改时间：22:44:58" itemprop="dateCreated datePublished" datetime="2021-06-26T22:43:00+08:00">2021-06-26</time>
             
 
             
@@ -417,7 +418,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/容器/" itemprop="url" rel="index"><span itemprop="name">容器</span></a></span>
 
                 
                 
@@ -436,8 +437,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/02/01/docker安装MySQL/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/01/docker安装MySQL/" itemprop="commentCount"></span>
+                <a href="/2021/06/26/Docker-Compose-简单使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/06/26/Docker-Compose-简单使用/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -466,7 +467,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.8k</span>
+                <span title="本文字数">1.7k</span>
               
 
               
@@ -480,7 +481,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">4 分钟</span>
+                <span title="阅读时长">2 分钟</span>
               
             </div>
           
@@ -500,67 +501,111 @@
       
 
       
-        <p>都2021了，学会用docker 来构建软件开发吧，快速构建环境，容器比虚拟机更加轻量化，拥有诸多好处。下面我使用docker安装运行MySQL例子，为大家演示docker使用方法。</p>
-<h4 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h4><blockquote>
-<p>docker search mysql</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\syf&gt; docker search mysql</span><br><span class="line">NAME                              DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED</span><br><span class="line">mysql                             MySQL is a widely used, open-source relation…   10425               [OK]</span><br><span class="line">mariadb                           MariaDB is a community-developed fork of MyS…   3868                [OK]</span><br><span class="line">mysql/mysql-server                Optimized MySQL Server Docker images. Create…   763                                     [OK]</span><br><span class="line">percona                           Percona Server is a fork of the MySQL relati…   524                 [OK]</span><br><span class="line">centos/mysql-57-centos7           MySQL 5.7 SQL database server                   87</span><br><span class="line">mysql/mysql-cluster               Experimental MySQL Cluster Docker images. Cr…   79</span><br><span class="line">centurylink/mysql                 Image containing mysql. Optimized to be link…   59                                      [OK]</span><br><span class="line">bitnami/mysql                     Bitnami MySQL Docker Image                      48                                      [OK]</span><br><span class="line">deitch/mysql-backup               REPLACED! Please use http://hub.docker.com/r…   41                                      [OK]</span><br><span class="line">prom/mysqld-exporter                                                              37                                      [OK]</span><br><span class="line">databack/mysql-backup             Back up mysql databases to... anywhere!         37</span><br><span class="line">tutum/mysql                       Base docker image to run a MySQL database se…   35</span><br><span class="line">schickling/mysql-backup-s3        Backup MySQL to S3 (supports periodic backup…   29                                      [OK]</span><br><span class="line">linuxserver/mysql                 A Mysql container, brought to you by LinuxSe…   27</span><br><span class="line">centos/mysql-56-centos7           MySQL 5.6 SQL database server                   20</span><br><span class="line">circleci/mysql                    MySQL is a widely used, open-source relation…   20</span><br><span class="line">arey/mysql-client                 Run a MySQL client from a docker container      17                                      [OK]</span><br><span class="line">mysql/mysql-router                MySQL Router provides transparent routing be…   17</span><br><span class="line">fradelg/mysql-cron-backup         MySQL/MariaDB database backup using cron tas…   10                                      [OK]</span><br><span class="line">yloeffler/mysql-backup            This image runs mysqldump to backup data usi…   7                                       [OK]</span><br><span class="line">openshift/mysql-55-centos7        DEPRECATED: A Centos7 based MySQL v5.5 image…   6</span><br><span class="line">devilbox/mysql                    Retagged MySQL, MariaDB and PerconaDB offici…   3</span><br><span class="line">ansibleplaybookbundle/mysql-apb   An APB which deploys RHSCL MySQL                2                                       [OK]</span><br><span class="line">jelastic/mysql                    An image of the MySQL database server mainta…   1</span><br><span class="line">widdpim/mysql-client              Dockerized MySQL Client (5.7) including Curl…   1                                       [OK]</span><br></pre></td></tr></table></figure>
-
-<p>这些都是镜像都是<a href="https://hub.docker.com/" target="_blank" rel="noopener">dockerhub</a>官方镜像，如果想了解它们详细信息，可以去官网搜索关键字。这里我选择第一个，MySQL官方镜像。</p>
-<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4><blockquote>
-<p>docker pull mysql</p>
-</blockquote>
-<p>这里还可以选择MySQL版本</p>
-<blockquote>
-<p>docker pull [选项] [Docker Registry地址]&lt;仓库名&gt;:&lt;标签&gt;</p>
-</blockquote>
+        <p>Docker Compose 是Docker 官方的开源项目， 负责实现对 Docker 容器集群的快速编排。通过使用一个 <code>docker-compose.yml</code>模板文件来定义一个或者多个容器，满足一个软件应用运行环境。<br>Docker Compose 有三大使用场景</p>
 <ul>
-<li><p>Docker Registry地址： 地址的格式一般是 &lt;域名/IP&gt;[:端口号] 。 默认地址是 Docker Hub。</p>
-</li>
-<li><p>仓库名： 如之前所说， 这里的仓库名是两段式名称， 既 &lt;用户名&gt;/&lt;软件名&gt; 。 对于 Docker Hub， 如果不给出用户名， 则默认为 library ， 也就是官方镜像。 </p>
-</li>
-<li><p>标签:  如果不指定tag(类似:8.0)，那么docker默认会为我们加上latest</p>
-<h4 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h4><p>简单运行镜像</p>
-<blockquote>
-<p> docker run –name  mysql-name -e MYSQL_ROOT_PASSWORD=password -d mysql:tag</p>
-</blockquote>
-</li>
-<li><p>name : mysql镜像运行容器名称</p>
-</li>
-<li><p>d : 守护进程方式运行镜像</p>
-</li>
-<li><p>e : 镜像系统变量设置，如上面例子MYSQL_ROOT_PASSWORD 设置MySQL root密码 ，详情变量可以查看镜像说明。</p>
-</li>
-<li><p>tag: 指定运行image标签，不写默认就运行laster，像MySQL这类镜像tag 多为版本号，支持多个版本MySQL运行。</p>
-</li>
+<li>Dockerfile 文件构建容器，定制镜像</li>
+<li>docker-compose.yml  构建软件环境</li>
+<li>docker-compose 启动容器</li>
 </ul>
-<p>还可以通过-p 网络映射，将容器内端口映射到运行主机上某一个端口，这个我们访问这个端口，就可以连接到容器内MySQL了。</p>
-<blockquote>
-<p> docker run –name  mysql-name  -p 3306:3306  -e MYSQL_ROOT_PASSWORD=password -d mysql:tag</p>
-</blockquote>
-<p>将容器内3306端口映射到主机上3306，使用方式 -p 主机端口:容器端口</p>
-<h4 id="MySQL容器数据保存"><a href="#MySQL容器数据保存" class="headerlink" title="MySQL容器数据保存"></a>MySQL容器数据保存</h4><p>在MySQL容器的数据一般有两个存储方式。</p>
-<ul>
-<li>让Docker通过使用其自身的内部卷管理将数据库文件写入主机系统上的磁盘来管理数据库数据的存储，这种是默认存储方式，但是有个弊端，数据会随着容器生命周期结束而被销毁，不符合一个数据库保存数据标准。</li>
-<li>在容器运行前，通过数据卷映射，将MySQL数据保存到主机路径上。当容器被停止时，数据会保存到主机路径上的，这种方式更加符合MySQL日常使用。<blockquote>
-<p>docker run –name mysql-name  -p 3306:3306l -v /my/own/datadir:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=password -d mysql:tag</p>
-</blockquote>
-</li>
-</ul>
-<p>-v 将主机路径/my/own/datadir 路径挂载到容器内/var/lib/mysql路径，这样在/var/lib/mysql下保存MySQL data 就会保存到主机/my/own/datadir 下，当容器再次启动时MySQL就会从/my/own/datadir 加载数据。前提是要保证/my/own/datadir 目录文件时存在的。如果不知道MySQL容器保存数据在哪里，可以进入容器查看配置文件</p>
-<h4 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h4><blockquote>
-<p> docker exec -it mysql-name /bin/bash</p>
-</blockquote>
-<p>查看配置文件</p>
-<blockquote>
-<p>cat /etc/mysql/my.cnf</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line"># The MySQL  Server configuration file.</span><br><span class="line">#</span><br><span class="line"># For explanations see</span><br><span class="line"># http://dev.mysql.com/doc/mysql/en/server-system-variables.html</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">pid-file        = /var/run/mysqld/mysqld.pid</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br><span class="line">datadir         = /var/lib/mysql</span><br><span class="line">secure-file-priv= NULL</span><br><span class="line"></span><br><span class="line"># Custom config should go here</span><br><span class="line">!includedir /etc/mysql/conf.d/</span><br></pre></td></tr></table></figure>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>在window和mac 中，只有安装docker 就会捆绑安装Docker Compose<br>Linux 用户使用以下命令进行安装</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -L &quot;https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose</span><br></pre></td></tr></table></figure>
 
-<p>数据保存到<code>/var/lib/mysql</code> 路径下<code>,exit</code> 退出，将容器data 路径下文件copy到主机下。</p>
-<blockquote>
-<p> docker cp mysql-name:/var/lib/mysql/   /my/own/datadir</p>
+<p>对二进制文件可执行权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod +x /usr/local/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<p>查看是否安装成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose version</span><br><span class="line">docker-compose version 1.29.1, build c34c88b2</span><br><span class="line">docker-py version: 5.0.0</span><br><span class="line">CPython version: 3.9.0</span><br><span class="line">OpenSSL version: OpenSSL 1.1.1g  21 Apr 2020</span><br></pre></td></tr></table></figure>
+
+<h4 id="编写docker-compose-yml"><a href="#编写docker-compose-yml" class="headerlink" title="编写docker-compose.yml"></a>编写docker-compose.yml</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3.9"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务 在它下面可以定义应用需要的一些服务，每个服务都有自己的名字、使用的镜像、挂载的数据卷、所属的网络、依赖哪些其他服务等等。</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="comment">#服务名称</span></span><br><span class="line"><span class="attr">  webapp:</span></span><br><span class="line">    <span class="comment"># docker 运行在名字，在docker ps -a 看到的名字</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">mynginx</span></span><br><span class="line">    <span class="comment"># 镜像 : 标签</span></span><br><span class="line"><span class="attr">    image:</span> <span class="attr">nginx:syf</span></span><br><span class="line">    <span class="comment"># 端口映射 主机端口： 容器端口</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"80:80"</span></span><br><span class="line">    <span class="comment"># 物理卷挂载 将本地路径挂载到容器内</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="attr">      - D:</span><span class="string">/docker-compose/html:/usr/share/nginx/html</span></span><br><span class="line"><span class="attr">    dns:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+
+<p>Compose 有多个版本支持2.x 、3.x,下面提供版本对应docker版本</p>
+<table>
+<thead>
+<tr>
+<th align="center">Compose file format</th>
+<th align="center">Docker Engine release</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Compose specification</td>
+<td align="center">19.03.0+</td>
+</tr>
+<tr>
+<td align="center">3.8</td>
+<td align="center">19.03.0</td>
+</tr>
+<tr>
+<td align="center">3.7</td>
+<td align="center">18.06.0+</td>
+</tr>
+<tr>
+<td align="center">3.6</td>
+<td align="center">18.02.0+</td>
+</tr>
+<tr>
+<td align="center">3.5</td>
+<td align="center">17.12.0+</td>
+</tr>
+<tr>
+<td align="center">3.4</td>
+<td align="center">17.09.0+</td>
+</tr>
+<tr>
+<td align="center">3.3</td>
+<td align="center">17.06.0+</td>
+</tr>
+<tr>
+<td align="center">3.2</td>
+<td align="center">17.04.0+</td>
+</tr>
+<tr>
+<td align="center">3.1</td>
+<td align="center">1.13.1+</td>
+</tr>
+<tr>
+<td align="center">3.0</td>
+<td align="center">1.13.0+</td>
+</tr>
+<tr>
+<td align="center">2.4</td>
+<td align="center">17.12.0+</td>
+</tr>
+<tr>
+<td align="center">2.3</td>
+<td align="center">17.06.0+</td>
+</tr>
+<tr>
+<td align="center">2.2</td>
+<td align="center">1.13.0+</td>
+</tr>
+<tr>
+<td align="center">2.1</td>
+<td align="center">1.12.0+</td>
+</tr>
+<tr>
+<td align="center">2.0</td>
+<td align="center">1.10.0+</td>
+</tr>
+</tbody></table>
+<p>docker-compose.yml 文件还可以添加很多配置，有兴趣同学去看<a href="https://docs.docker.com/compose/compose-file/compose-file-v3/" target="_blank" rel="noopener">官网文档</a></p>
+<h4 id="docker-compose-命令"><a href="#docker-compose-命令" class="headerlink" title="docker-compose 命令"></a>docker-compose 命令</h4><blockquote>
+<p> docker-compose [-f <arg>…] [–profile <name>…] [options] [–] [COMMAND] [ARGS…]</name></arg></p>
 </blockquote>
+<p>启动容器</p>
+<blockquote>
+<p>docker-compose -f docker-compose.yml  up -d</p>
+</blockquote>
+<p>docker-compose 经常使用命令</p>
+<ul>
+<li>build  构建或者重构service</li>
+<li>create 创建service</li>
+<li>down 停止并且删除容器资源</li>
+<li>exec 在容器内执行命令 类型docker exec命令</li>
+<li>logs 查看容器日志，与docker logs 类似</li>
+<li>restart 重启容器</li>
+<li>start 开启服务</li>
+<li>up  创建并且开始容器 </li>
+</ul>
 
       
     </div>
@@ -581,6 +626,17 @@
     
 
     <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+            <a href="/tags/Docker-Compose/" rel="tag"># Docker Compose</a>
+          
+        </div>
       
 
       
@@ -612,8 +668,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/10/18/Spring-配置文件字段注入到List、Map/" rel="next" title="Spring 配置文件字段注入到List、Map">
-                <i class="fa fa-chevron-left"></i> Spring 配置文件字段注入到List、Map
+              <a href="/2021/02/01/docker安装MySQL/" rel="next" title="docker安装MySQL">
+                <i class="fa fa-chevron-left"></i> docker安装MySQL
               </a>
             
           </div>
@@ -621,10 +677,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2021/06/26/Docker-Compose-简单使用/" rel="prev" title="Docker Compose 简单使用">
-                Docker Compose 简单使用 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -825,7 +877,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#搜索镜像"><span class="nav-number">1.</span> <span class="nav-text">搜索镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拉取镜像"><span class="nav-number">2.</span> <span class="nav-text">拉取镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行镜像"><span class="nav-number">3.</span> <span class="nav-text">运行镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL容器数据保存"><span class="nav-number">4.</span> <span class="nav-text">MySQL容器数据保存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进入容器"><span class="nav-number">5.</span> <span class="nav-text">进入容器</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编写docker-compose-yml"><span class="nav-number">2.</span> <span class="nav-text">编写docker-compose.yml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-compose-命令"><span class="nav-number">3.</span> <span class="nav-text">docker-compose 命令</span></a></li></ol></div>
             
 
           </div>
@@ -1045,9 +1097,9 @@
 
 <script>
   var disqus_config = function() {
-    this.page.url = "https://shenyifengtk.github.io/2021/02/01/docker安装MySQL/";
-    this.page.identifier = "2021/02/01/docker安装MySQL/";
-    this.page.title = 'docker安装MySQL';
+    this.page.url = "https://shenyifengtk.github.io/2021/06/26/Docker-Compose-简单使用/";
+    this.page.identifier = "2021/06/26/Docker-Compose-简单使用/";
+    this.page.title = 'Docker Compose 简单使用';
     };
   function loadComments() {
     var d = document, s = d.createElement('script');
