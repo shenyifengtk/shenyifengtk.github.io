@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一直很好奇开源软件的启动脚本是怎么写出来的，直到最近看到seata pox.xml 才了解到有个appassembler-maven-plugi插件非常简单。可以用过简单xml配置，就可以将项目打包并且生成多个平台的启动脚本，非常简单、实用，下面我全方位带大家去了如何去使用它。 介绍插件根据官网介绍，这个插件主要用于生成启动 java 应用程序的脚本，能将项目依赖jar能够打包目录中，并且它们加入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="appassembler-maven-plugin详解">
+<meta property="og:url" content="https://shenyifengtk.github.io/2021/10/11/appassembler-maven-plugin详解/index.html">
+<meta property="og:site_name" content="神易风 blog">
+<meta property="og:description" content="一直很好奇开源软件的启动脚本是怎么写出来的，直到最近看到seata pox.xml 才了解到有个appassembler-maven-plugi插件非常简单。可以用过简单xml配置，就可以将项目打包并且生成多个平台的启动脚本，非常简单、实用，下面我全方位带大家去了如何去使用它。 介绍插件根据官网介绍，这个插件主要用于生成启动 java 应用程序的脚本，能将项目依赖jar能够打包目录中，并且它们加入">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-10-11T15:42:16.719Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="appassembler-maven-plugin详解">
+<meta name="twitter:description" content="一直很好奇开源软件的启动脚本是怎么写出来的，直到最近看到seata pox.xml 才了解到有个appassembler-maven-plugi插件非常简单。可以用过简单xml配置，就可以将项目打包并且生成多个平台的启动脚本，非常简单、实用，下面我全方位带大家去了如何去使用它。 介绍插件根据官网介绍，这个插件主要用于生成启动 java 应用程序的脚本，能将项目依赖jar能够打包目录中，并且它们加入">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://shenyifengtk.github.io/2021/10/11/appassembler-maven-plugin详解/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>appassembler-maven-plugin详解 | 神易风 blog</title>
+  
+
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111663733-2"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !false) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-111663733-2');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">神易风 blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">求知若饥，虚心若愚</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2021/10/11/appassembler-maven-plugin详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="神易峰">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神易风 blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">appassembler-maven-plugin详解
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-10-11 23:32:00 / 修改时间：23:42:16" itemprop="dateCreated datePublished" datetime="2021-10-11T23:32:00+08:00">2021-10-11</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/maven插件/" itemprop="url" rel="index"><span itemprop="name">maven插件</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/10/11/appassembler-maven-plugin详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/10/11/appassembler-maven-plugin详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一直很好奇开源软件的启动脚本是怎么写出来的，直到最近看到seata pox.xml 才了解到有个appassembler-maven-plugi插件非常简单。可以用过简单xml配置，就可以将项目打包并且生成多个平台的启动脚本，非常简单、实用，下面我全方位带大家去了如何去使用它。</p>
+<h4 id="介绍插件"><a href="#介绍插件" class="headerlink" title="介绍插件"></a>介绍插件</h4><p>根据<a href="!https://www.mojohaus.org/appassembler/appassembler-maven-plugin/">官网</a>介绍，这个插件主要用于生成启动 java 应用程序的脚本，能将项目依赖jar能够打包目录中，并且它们加入启动脚本类路径中。<br>支持平台</p>
+<ul>
+<li>Unix-variants</li>
+<li>Windows NT (Windows 9x is NOT supported)</li>
+<li>Java Service Wrapper (JSW)  可以很方便得在各个平台（windows，linux，max os）管理Java进程,管理JVM，启动停止，开机启动，管理内存溢出的异常  标准版还可以发错误日志email，检测死锁。<a href="!https://wrapper.tanukisoftware.com/doc/english/product-overview.html">官方说明</a></li>
+</ul>
+<p>主要命令：<br><a href="https://www.mojohaus.org/appassembler/appassembler-maven-plugin/assemble-mojo.html" target="_blank" rel="noopener">appassembler:assemble</a> 打包项目并且配置bin 启动脚本，可以理解为使用类似spring-boot-maven-plugin打包出来项目，可以通过java -jar 方式启动项目，但是不支持stop、satus、restart这些操作，比较原始。<br><a href="https://www.mojohaus.org/appassembler/appassembler-maven-plugin/create-repository-mojo.html" target="_blank" rel="noopener">appassembler:create-repository</a> 创建一个 appassembler 存储库，就是将工程打成jar<br><a href="https://www.mojohaus.org/appassembler/appassembler-maven-plugin/generate-daemons-mojo.html" target="_blank" rel="noopener">appassembler:generate-daemons</a>  生成基于 JSW 的守护进程包装器,大多数人都是使用这个，重点讲。</p>
+<h4 id="appassembler-assemble"><a href="#appassembler-assemble" class="headerlink" title="appassembler:assemble"></a>appassembler:assemble</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugin&gt;</span><br><span class="line">               &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;</span><br><span class="line">               &lt;artifactId&gt;appassembler-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">               &lt;version&gt;2.1.0&lt;/version&gt;</span><br><span class="line">               &lt;configuration&gt;</span><br><span class="line">                   &lt;platforms&gt;</span><br><span class="line">                       &lt;platform&gt;unix&lt;/platform&gt;</span><br><span class="line">                       &lt;platform&gt;windows&lt;/platform&gt;</span><br><span class="line">                   &lt;/platforms&gt;</span><br><span class="line">                   &lt;!--包的存放路劲--&gt;</span><br><span class="line">                   &lt;assembleDirectory&gt;$&#123;project.build.directory&#125;/$&#123;project.name&#125;&lt;/assembleDirectory&gt;</span><br><span class="line">                   &lt;repositoryName&gt;lib&lt;/repositoryName&gt;</span><br><span class="line">                   &lt;!--启动脚本目录--&gt;</span><br><span class="line">                   &lt;binFolder&gt;bin&lt;/binFolder&gt;</span><br><span class="line">                   &lt;!--配置文件路径--&gt;</span><br><span class="line">                   &lt;configurationDirectory&gt;conf&lt;/configurationDirectory&gt;</span><br><span class="line">                   &lt;!--是否copy配置文件--&gt;</span><br><span class="line">                   &lt;copyConfigurationDirectory&gt;true&lt;/copyConfigurationDirectory&gt;</span><br><span class="line">                   &lt;!--从哪里copy配置文件--&gt;</span><br><span class="line">                   &lt;configurationSourceDirectory&gt;src/main/resources&lt;/configurationSourceDirectory&gt;</span><br><span class="line">                   &lt;includeConfigurationDirectoryInClasspath&gt;true&lt;/includeConfigurationDirectoryInClasspath&gt;</span><br><span class="line">                   &lt;!--flag 表示直接将jar放到lib 里面--&gt;</span><br><span class="line">                   &lt;repositoryLayout&gt;flat&lt;/repositoryLayout&gt;</span><br><span class="line">                   &lt;encoding&gt;UTF-8&lt;/encoding&gt;</span><br><span class="line">                   &lt;logsDirectory&gt;logs&lt;/logsDirectory&gt;</span><br><span class="line">                   &lt;tempDirectory&gt;tmp&lt;/tempDirectory&gt;</span><br><span class="line">                   &lt;programs&gt;</span><br><span class="line">                       &lt;program&gt;</span><br><span class="line">                           &lt;mainClass&gt;tk.shenyifeng.demo.DemoApplication&lt;/mainClass&gt;</span><br><span class="line">                           &lt;id&gt;demo&lt;/id&gt;</span><br><span class="line">                           &lt;jvmSettings&gt;</span><br><span class="line">                               &lt;extraArguments&gt;</span><br><span class="line">                                   &lt;extraArgument&gt;-server&lt;/extraArgument&gt;</span><br><span class="line">                                   &lt;extraArgument&gt;-Xms256M&lt;/extraArgument&gt;</span><br><span class="line">                                   &lt;extraArgument&gt;-Xmx256M&lt;/extraArgument&gt;</span><br><span class="line">                                   &lt;extraArgument&gt;-Xss512k&lt;/extraArgument&gt;</span><br><span class="line">                                   &lt;extraArgument&gt;-Xloggc:@BASEDIR@/logs/demo_gc.log&lt;/extraArgument&gt;</span><br><span class="line">                                   &lt;extraArgument&gt;-verbose:gc&lt;/extraArgument&gt;</span><br><span class="line">                                   &lt;extraArgument&gt;-XX:+HeapDumpOnOutOfMemoryError&lt;/extraArgument&gt;</span><br><span class="line">                                   &lt;extraArgument&gt;-XX:HeapDumpPath=@BASEDIR@/logs/java_heapdump.hprof&lt;/extraArgument&gt;</span><br><span class="line">                               &lt;/extraArguments&gt;</span><br><span class="line">                           &lt;/jvmSettings&gt;</span><br><span class="line">                       &lt;/program&gt;</span><br><span class="line">                   &lt;/programs&gt;</span><br><span class="line">               &lt;/configuration&gt;</span><br><span class="line">           &lt;/plugin&gt;</span><br></pre></td></tr></table></figure>
+
+<p>运行命令 <code>mvn package appassembler:assemble</code>  就可以在target/工程名/下看见打包好的工程，进入bin 目录可以看见有unix、windows 两大平台的运行脚本，但是这个脚本只有启动工程，不支持stop、restart 。</p>
+<h4 id="appassembler-generate-daemons"><a href="#appassembler-generate-daemons" class="headerlink" title="appassembler:generate-daemons"></a>appassembler:generate-daemons</h4><p>这个才是最重要的命令，使用插件都是使用这个生成可以启动、停止的脚本，方便在多个平台部署。下面直接贴上xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugin&gt;</span><br><span class="line">    &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;appassembler-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.1.0&lt;/version&gt;</span><br><span class="line">    &lt;configuration&gt;</span><br><span class="line">        &lt;platforms&gt;</span><br><span class="line">            &lt;platform&gt;unix&lt;/platform&gt;</span><br><span class="line">            &lt;platform&gt;windows&lt;/platform&gt;</span><br><span class="line">        &lt;/platforms&gt;</span><br><span class="line">        &lt;!--包的存放路劲--&gt;</span><br><span class="line">        &lt;assembleDirectory&gt;$&#123;project.build.directory&#125;/$&#123;project.name&#125;&lt;/assembleDirectory&gt;</span><br><span class="line">        &lt;repositoryName&gt;lib&lt;/repositoryName&gt;</span><br><span class="line">        &lt;!--启动脚本目录--&gt;</span><br><span class="line">        &lt;binFolder&gt;bin&lt;/binFolder&gt;</span><br><span class="line">        &lt;!--配置文件路径--&gt;</span><br><span class="line">        &lt;configurationDirectory&gt;conf&lt;/configurationDirectory&gt;</span><br><span class="line">        &lt;!--是否copy配置文件--&gt;</span><br><span class="line">        &lt;copyConfigurationDirectory&gt;true&lt;/copyConfigurationDirectory&gt;</span><br><span class="line">        &lt;!--从哪里copy配置文件--&gt;</span><br><span class="line">        &lt;configurationSourceDirectory&gt;src/main/resources&lt;/configurationSourceDirectory&gt;</span><br><span class="line">        &lt;includeConfigurationDirectoryInClasspath&gt;true&lt;/includeConfigurationDirectoryInClasspath&gt;</span><br><span class="line">        &lt;binFileExtensions&gt;</span><br><span class="line">            &lt;unix&gt;.sh&lt;/unix&gt;</span><br><span class="line">            &lt;windows&gt;.bat&lt;/windows&gt;</span><br><span class="line">        &lt;/binFileExtensions&gt;</span><br><span class="line">        &lt;!--flag 表示直接将jar放到lib 里面--&gt;</span><br><span class="line">        &lt;repositoryLayout&gt;flat&lt;/repositoryLayout&gt;</span><br><span class="line">        &lt;encoding&gt;UTF-8&lt;/encoding&gt;</span><br><span class="line">        &lt;logsDirectory&gt;logs&lt;/logsDirectory&gt;</span><br><span class="line">        &lt;tempDirectory&gt;tmp&lt;/tempDirectory&gt;</span><br><span class="line">        &lt;daemons&gt;</span><br><span class="line">            &lt;daemon&gt;</span><br><span class="line">                &lt;id&gt;demo&lt;/id&gt;</span><br><span class="line">                &lt;mainClass&gt;tk.shenyifeng.demo.DemoApplication&lt;/mainClass&gt;</span><br><span class="line">                &lt;platforms&gt;</span><br><span class="line">                    &lt;platform&gt;jsw&lt;/platform&gt;</span><br><span class="line">                &lt;/platforms&gt;</span><br><span class="line">                 可以通过generatorConfigurations 设置脚本平台</span><br><span class="line">                &lt;generatorConfigurations&gt;</span><br><span class="line">                    &lt;generatorConfiguration&gt;</span><br><span class="line">                        &lt;generator&gt;jsw&lt;/generator&gt;</span><br><span class="line">                        &lt;includes&gt;</span><br><span class="line">                            &lt;include&gt;linux-x86-32&lt;/include&gt;</span><br><span class="line">                            &lt;include&gt;linux-x86-64&lt;/include&gt;</span><br><span class="line">                            &lt;include&gt;windows-x86-32&lt;/include&gt;</span><br><span class="line">                            &lt;include&gt;windows-x86-64&lt;/include&gt;</span><br><span class="line">                        &lt;/includes&gt;</span><br><span class="line">                    &lt;/generatorConfiguration&gt;</span><br><span class="line">                &lt;/generatorConfigurations&gt;</span><br><span class="line">                &lt;jvmSettings&gt;</span><br><span class="line">                    &lt;extraArguments&gt;</span><br><span class="line">                        &lt;extraArgument&gt;-server&lt;/extraArgument&gt;</span><br><span class="line">                        &lt;extraArgument&gt;-Xms256M&lt;/extraArgument&gt;</span><br><span class="line">                        &lt;extraArgument&gt;-Xmx256M&lt;/extraArgument&gt;</span><br><span class="line">                        &lt;extraArgument&gt;-Xss512k&lt;/extraArgument&gt;</span><br><span class="line">                        &lt;extraArgument&gt;-Xloggc:logs/demo_gc.log&lt;/extraArgument&gt;</span><br><span class="line">                        &lt;extraArgument&gt;-verbose:gc&lt;/extraArgument&gt;</span><br><span class="line">                        &lt;extraArgument&gt;-XX:+HeapDumpOnOutOfMemoryError&lt;/extraArgument&gt;</span><br><span class="line">                        &lt;extraArgument&gt;-XX:HeapDumpPath=logs/java_heapdump.hprof&lt;/extraArgument&gt;</span><br><span class="line">                    &lt;/extraArguments&gt;</span><br><span class="line">                    &gt;</span><br><span class="line">                &lt;/jvmSettings&gt;</span><br><span class="line">            &lt;/daemon&gt;</span><br><span class="line">        &lt;/daemons&gt;</span><br><span class="line"></span><br><span class="line">        &lt;programs&gt;</span><br><span class="line">            &lt;program&gt;</span><br><span class="line">                &lt;mainClass&gt;tk.shenyifeng.demo.DemoApplication&lt;/mainClass&gt;</span><br><span class="line">                &lt;id&gt;demoApp&lt;/id&gt;</span><br><span class="line">            &lt;/program&gt;</span><br><span class="line">        &lt;/programs&gt;</span><br><span class="line">    &lt;/configuration&gt;</span><br><span class="line">&lt;/plugin&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在命令行执行 </p>
+<blockquote>
+<p>mvn clean  package appassembler:generate-daemons</p>
+</blockquote>
+<p>打包的文件夹在参数 target 设置，如果没有默认值 <strong><code>${project.build.directory}/generated-resources/appassembler</code></strong> ， 所以生成文件假放在  target\generated-resources\appassembler\ 下。<br>注意在windows 下执行改脚本需要使用管理员，不然会出现</p>
+<blockquote>
+<p>wrapper  | OpenSCManager failed - 拒绝访问。 (0x5)</p>
+</blockquote>
+<p>首先执行 ,安装服务</p>
+<blockquote>
+<p> demo.bat install</p>
+</blockquote>
+<p>安装成功，就可以使用  start 运行服务了</p>
+<blockquote>
+<p> demo.bat start </p>
+</blockquote>
+<p>注意这个插件和<code>spring-boot-maven-plugin</code> 不兼容，会出现<code>无法找到主类</code>异常，主要还是因为可执行的jar格式在BOOT-INF/classes中打包应用程序类。这意味着当可执行jar用作依赖项时，无法找到它们。遇到这种情况在打包是，去除<code>spring-boot-maven-plugin</code>  即可</p>
+<p>项目已经放在<a href="!https://github.com/xiaowu6666/appassembler-plugin-demo.git">GitHub</a>，有兴趣自己去查看。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/08/28/MySQL主从复制/" rel="next" title="MySQL主从复制">
+                <i class="fa fa-chevron-left"></i> MySQL主从复制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="神易峰">
+            
+              <p class="site-author-name" itemprop="name">神易峰</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#介绍插件"><span class="nav-number">1.</span> <span class="nav-text">介绍插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#appassembler-assemble"><span class="nav-number">2.</span> <span class="nav-text">appassembler:assemble</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#appassembler-generate-daemons"><span class="nav-number">3.</span> <span class="nav-text">appassembler:generate-daemons</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">神易峰</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">172k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">2:36</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.2</div>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shenyifengtk.github.io/2021/10/11/appassembler-maven-plugin详解/";
+    this.page.identifier = "2021/10/11/appassembler-maven-plugin详解/";
+    this.page.title = 'appassembler-maven-plugin详解';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "box";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "bottomCenter";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+        flOptions.iconStyle = "box";
+      
+        flOptions.boxForm = "horizontal";
+      
+        flOptions.position = "middleRight";
+      
+        flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
