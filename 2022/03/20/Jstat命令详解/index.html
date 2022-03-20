@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="jstat是JDK自带的一个轻量级小工具。全称“Java Virtual Machine statistics monitoring tool”，主要利用JVM内建的指令对Java应用程序的资源和性能进行实时的命令行的监控，包括了对Heap size和垃圾回收状况的监控。下面展示常用命令jstat –class : 显示加载class的数量，及所占空间等信息。可以列出当前JVM版本支持的选项，常见">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jstat命令详解">
+<meta property="og:url" content="https://shenyifengtk.github.io/2022/03/20/Jstat命令详解/index.html">
+<meta property="og:site_name" content="神易风 blog">
+<meta property="og:description" content="jstat是JDK自带的一个轻量级小工具。全称“Java Virtual Machine statistics monitoring tool”，主要利用JVM内建的指令对Java应用程序的资源和性能进行实时的命令行的监控，包括了对Heap size和垃圾回收状况的监控。下面展示常用命令jstat –class : 显示加载class的数量，及所占空间等信息。可以列出当前JVM版本支持的选项，常见">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-03-20T14:14:19.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jstat命令详解">
+<meta name="twitter:description" content="jstat是JDK自带的一个轻量级小工具。全称“Java Virtual Machine statistics monitoring tool”，主要利用JVM内建的指令对Java应用程序的资源和性能进行实时的命令行的监控，包括了对Heap size和垃圾回收状况的监控。下面展示常用命令jstat –class : 显示加载class的数量，及所占空间等信息。可以列出当前JVM版本支持的选项，常见">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://shenyifengtk.github.io/2022/03/20/Jstat命令详解/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Jstat命令详解 | 神易风 blog</title>
+  
+
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111663733-2"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !false) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-111663733-2');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">神易风 blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">求知若饥，虚心若愚</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2022/03/20/Jstat命令详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="神易峰">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神易风 blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Jstat命令详解
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-03-20 21:57:00 / 修改时间：22:14:19" itemprop="dateCreated datePublished" datetime="2022-03-20T21:57:00+08:00">2022-03-20</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM命令/" itemprop="url" rel="index"><span itemprop="name">JVM命令</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM命令/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2022/03/20/Jstat命令详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/03/20/Jstat命令详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>jstat是JDK自带的一个轻量级小工具。全称“Java Virtual Machine statistics monitoring tool”，主要利用JVM内建的指令对Java应用程序的资源和性能进行实时的命令行的监控，包括了对Heap size和垃圾回收状况的监控。<br>下面展示常用命令<br>jstat –class<pid> : 显示加载class的数量，及所占空间等信息。<br>可以列出当前JVM版本支持的选项，常见的有</pid></p>
+<ul>
+<li>-class 类加载器</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">显示列名</th>
+<th align="center">具体描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>Loaded</strong></td>
+<td align="center">装载的类的数量</td>
+</tr>
+<tr>
+<td align="center"><strong>Bytes</strong></td>
+<td align="center">装载的字节数</td>
+</tr>
+<tr>
+<td align="center"><strong>Unloaded</strong></td>
+<td align="center">卸载的类的数量</td>
+</tr>
+<tr>
+<td align="center"><strong>Bytes</strong></td>
+<td align="center">卸载的类数量</td>
+</tr>
+<tr>
+<td align="center"><strong>Time</strong></td>
+<td align="center">装载和卸载的使用时间</td>
+</tr>
+</tbody></table>
+<p>例子如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jstat -class 86517</span><br><span class="line">Loaded  Bytes  Unloaded  Bytes     Time</span><br><span class="line"> 18051 32345.3        0     0.0     112.14</span><br></pre></td></tr></table></figure>
+
+<p>jstat -compiler pid显示VM实时编译的数量等信息。</p>
+<table>
+<thead>
+<tr>
+<th align="center">显示列名</th>
+<th align="center">具体描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>Compiled</strong></td>
+<td align="center">编译任务执行数量</td>
+</tr>
+<tr>
+<td align="center"><strong>Failed</strong></td>
+<td align="center">编译任务执行错误的数量</td>
+</tr>
+<tr>
+<td align="center"><strong>Invalid</strong></td>
+<td align="center">编译任务执行失效的数量</td>
+</tr>
+<tr>
+<td align="center"><strong>Time</strong></td>
+<td align="center">编译任务执行的时间</td>
+</tr>
+<tr>
+<td align="center"><strong>FailedType</strong></td>
+<td align="center">编译任务最后一个执行的类型</td>
+</tr>
+<tr>
+<td align="center"><strong>FailedMethod</strong></td>
+<td align="center">最后一个编译失败任务所在的类及方法</td>
+</tr>
+</tbody></table>
+<p>例子如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jstat -compiler 86517</span><br><span class="line">Compiled Failed Invalid   Time   FailedType FailedMethod</span><br><span class="line"> 23183      9       0   459.21          1</span><br></pre></td></tr></table></figure>
+
+<p>jstat -gc <pid>: 可以显示gc的信息，查看gc的次数，及时间。</pid></p>
+<table>
+<thead>
+<tr>
+<th align="center">列名</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>S0C</strong></td>
+<td align="center">幸存区Survior1  S0空间容量 (kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>S1C</strong></td>
+<td align="center">幸存区Survior S1空间容量(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>S0U</strong></td>
+<td align="center">幸存区Survior1  S0使用空间(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>S1U</strong></td>
+<td align="center">幸存区Survior S1 使用空间(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>EC</strong></td>
+<td align="center">Eden 区空间容量(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>EU</strong></td>
+<td align="center">Eden 区使用空间(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>OC</strong></td>
+<td align="center">老年代Old空间容量(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>OU</strong></td>
+<td align="center">老年代Old(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>MC</strong></td>
+<td align="center">元空间MetaSpace 空间容量(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>MU</strong></td>
+<td align="center">元空间MetaSpace使用空间(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>CCSC</strong></td>
+<td align="center">压缩类空间容量(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>CCSU</strong></td>
+<td align="center">压缩类使用空间(kb)</td>
+</tr>
+<tr>
+<td align="center"><strong>YGC</strong></td>
+<td align="center">年轻代gc回收数量</td>
+</tr>
+<tr>
+<td align="center"><strong>YGCT</strong></td>
+<td align="center">年轻代gc收集时间</td>
+</tr>
+<tr>
+<td align="center"><strong>FGC</strong></td>
+<td align="center">full gc执行数量</td>
+</tr>
+<tr>
+<td align="center"><strong>FGCT</strong></td>
+<td align="center">full gc 执行总时间</td>
+</tr>
+<tr>
+<td align="center"><strong>GCT</strong></td>
+<td align="center">总垃圾回收时间</td>
+</tr>
+</tbody></table>
+<p>例子如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jstat -gc 86517</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">66560.0 66560.0  0.0   7215.7 532480.0 89819.8  1431552.0  1291011.4  108752.0 101631.2 15004.0 11994.8  10491  163.755   0      0.000  163.755</span><br></pre></td></tr></table></figure>
+
+<p>jstat -gccapacity  pid 查看内存中堆的分代内存大小</p>
+<table>
+<thead>
+<tr>
+<th align="center">列名</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>NGCMN</strong></td>
+<td align="center">Young 年轻代最小的新一代容量（kB）</td>
+</tr>
+<tr>
+<td align="center"><strong>NGCMX</strong></td>
+<td align="center">Young 年轻代最大新一代容量（kB）</td>
+</tr>
+<tr>
+<td align="center"><strong>NGC</strong></td>
+<td align="center">Young 年轻代 当前容量（kB）</td>
+</tr>
+<tr>
+<td align="center"><strong>S0C</strong></td>
+<td align="center">幸存区Survior  S0空间容量 (kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>S1C</strong></td>
+<td align="center">幸存区Survior  S1空间容量 (kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>EC</strong></td>
+<td align="center">Eden区空间容量(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>OGCMN</strong></td>
+<td align="center">Old老年代最小的新一代容量(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>OGCMX</strong></td>
+<td align="center">Old老年代最大新一代容量(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>OGC</strong></td>
+<td align="center">当前Old老年代容量(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>OC</strong></td>
+<td align="center">当前旧的Old老年代容量(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>MCMN</strong></td>
+<td align="center">最小Metaspace元空间容量(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>MCMX</strong></td>
+<td align="center">最大Metaspace元空间容量(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>MC</strong></td>
+<td align="center">Metaspace元空间容量(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>CCSMN</strong></td>
+<td align="center">压缩类最小空间(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>CCSMX</strong></td>
+<td align="center">压缩类最大空间(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>CCSC</strong></td>
+<td align="center">压缩类的空间(kB)</td>
+</tr>
+<tr>
+<td align="center"><strong>YGC</strong></td>
+<td align="center">年轻代 GC 事件的数量</td>
+</tr>
+<tr>
+<td align="center"><strong>FGC</strong></td>
+<td align="center">Full GC 事件的数量</td>
+</tr>
+</tbody></table>
+<p>例子如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">jstat -gccapacity 86517</span><br><span class="line">NGCMN    NGCMX     NGC     S0C   S1C       EC      OGCMN      OGCMX       OGC         OC       MCMN     MCMX      MC     CCSMX     CCSC    YGC    FGC</span><br><span class="line"> 0.0 665600.0 665600.0 66560.0 66560.0 532480.0        0.0  1431552.0  1431552.0  1431552.0      0.0 1138688.0 104144.0      0.0 1048576.0  14492.0    350     0</span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line">-gccause &lt;pid&gt;  显示有关垃圾收集统计信息的摘要</span><br><span class="line">  </span><br><span class="line">|列名|描述|</span><br><span class="line">|:---:|:---:|</span><br><span class="line">|**S0**|幸存区Survior  S0利用率占空间当前容量的百分比|</span><br><span class="line">|**S1**|幸存区Survior  S1利用率占空间当前容量的百分比|</span><br><span class="line">|**E**|Eden区利用率占空间当前容量的百分比|</span><br><span class="line">|**O**|Old老年代利用率占空间当前容量的百分比|</span><br><span class="line">|**M**|Metaspace元空间利用率占空间当前容量的百分比|</span><br><span class="line">|**CCS**|以百分比形式压缩的类空间利用率|</span><br><span class="line">|**YGC**|年轻代 GC 事件的数量|</span><br><span class="line">|**YGCT**|年轻代垃圾回收时间|</span><br><span class="line">|**FGCT**|老年代GC时间|</span><br><span class="line">|**GCT**|总垃圾回收时间|</span><br><span class="line">|**LGCC**|上次垃圾回收的原因|</span><br><span class="line">|**GCC**|当前垃圾回收的原因|</span><br><span class="line"></span><br><span class="line">例子如下</span><br></pre></td></tr></table></figure>
+
+<p>jstat -gccause 86517<br> S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT    LGCC                 GCC<br> 0.00   7.93 42.77  86.85  93.51  79.91    425    9.173     0    0.000    9.173 CMS Initial Mark     No GC</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-gcnew &lt;pid&gt; 年轻代对象的信息</span><br><span class="line"></span><br><span class="line">|列名|描述|</span><br><span class="line">|:---:|:---:|</span><br><span class="line">|**S0C**|幸存区Survior  S0空间容量 (kb)|</span><br><span class="line">|**S1C**|幸存区Survior S1空间容量(kb) |</span><br><span class="line">|**S0U**|幸存区Survior1  S0使用空间(kb)|</span><br><span class="line">|**S1U**|幸存区Survior S1 使用空间(kb)|</span><br><span class="line">|**TT**|年轻代晋升到年老代的阈值|</span><br><span class="line">|**MTT**|年轻代晋升到年老代最大阈值|</span><br><span class="line">|**DSS**|所需的Survior1幸存者大小|</span><br><span class="line">|**EC**|Eden 区空间容量(kb)|</span><br><span class="line">|**EU**|Eden 区使用空间(kb)|</span><br><span class="line">|**YGC**|年轻代gc回收数量|</span><br><span class="line">|**YGCT**|年轻代gc收集时间|</span><br><span class="line"></span><br><span class="line">例子如下</span><br></pre></td></tr></table></figure>
+
+<p> jstat -gcnew 86517<br>S0C    S1C    S0U    S1U   TT MTT  DSS      EC       EU     YGC     YGCT<br>66560.0 66560.0    0.0 5509.0 10  10 33280.0 532480.0 173025.7    465    9.724</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">jstat -gcnewcapacity  年轻代空间大小统计</span><br><span class="line"></span><br><span class="line">|列名|描述|</span><br><span class="line">|:---:|:---:|</span><br><span class="line">|**NGCMN**|Young 年轻代最小的新一代容量（kB）|</span><br><span class="line">|**NGCMX**|Young 年轻代最大新一代容量（kB）|</span><br><span class="line">|**NGC**|Young 年轻代 当前容量（kB）|</span><br><span class="line">|**S0CMX**|幸存区Survior S0最大容量（kB）|</span><br><span class="line">|**S0c**|存区Survior  S0空间容量 (kb)|</span><br><span class="line">|**S1CMX**|幸存区Survior S1最大容量（kB）|</span><br><span class="line">|**S1C**|存区Survior  S1空间容量 (kb)|</span><br><span class="line">|**ECMX**|Eden 区空间最大容量(kb)|</span><br><span class="line">|**EC**|Eden 区空间容量(kb)|</span><br><span class="line">|**YGC**|年轻代gc回收数量|</span><br><span class="line">|**FGC**|Full gc 执行回收数量|</span><br><span class="line"></span><br><span class="line">例子如下</span><br></pre></td></tr></table></figure>
+
+<p>jstat -gcnewcapacity 86517<br>NGCMN      NGCMX       NGC      S0CMX     S0C     S1CMX     S1C       ECMX        EC      YGC   FGC<br>  0.0   665600.0   665600.0  66560.0  66560.0  66560.0  66560.0   532480.0   532480.0   512     0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">jstat -gcold &lt;pid&gt; 年老代空间大小统计</span><br><span class="line">  </span><br><span class="line">|列名|描述|</span><br><span class="line">|:---:|:---:|</span><br><span class="line">|**MC**|Metaspace元空间容量(kB)|</span><br><span class="line">|**MU**|元空间MetaSpace使用空间(kb)|</span><br><span class="line">|**CCSC**|压缩类的空间(kB)|</span><br><span class="line">|**CCSU**|压缩类使用空间(kb)|</span><br><span class="line">|**OC**|老年代Old空间容量(kb)|</span><br><span class="line">|**OU**|老年代Old(kb)|</span><br><span class="line">|**YGC**|年轻代gc回收数量|</span><br><span class="line">|**FGC**|Full gc 执行回收数量|</span><br><span class="line">|**FGCT**|老年代GC时间|</span><br><span class="line">|**GCT**|总垃圾回收时间|</span><br><span class="line"></span><br><span class="line">例子如下</span><br></pre></td></tr></table></figure>
+
+<p>jstat -gcold 86517<br>MC       MU      CCSC     CCSU       OC          OU       YGC    FGC    FGCT     GCT<br>104656.0  97895.1  14492.0  11590.2   1431552.0   1245031.1    924     0    0.000   16.289</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">jstat -gcoldcapacity &lt;pid&gt; 年老代容量空间大小统计</span><br><span class="line"></span><br><span class="line">|列名|描述|</span><br><span class="line">|:---:|:---:|</span><br><span class="line">|**OGCMN**|Old年老代最小容量(kb)|</span><br><span class="line">|**OGCMX**|Old年老代最大容量(kb)|</span><br><span class="line">|**OGC**|当前Old老年代容量(kB)|</span><br><span class="line">|**OC**|当前旧的Old老年代容量(kB)|</span><br><span class="line">|**YGC**|年轻代gc回收数量|</span><br><span class="line">|**FGC**|Full gc 执行回收数量|</span><br><span class="line">|**FGCT**|老年代GC时间|</span><br><span class="line">|**GCT**|总垃圾回收时间|</span><br><span class="line"></span><br><span class="line">例子如下</span><br></pre></td></tr></table></figure>
+
+<p>jstat -gcoldcapacity  86517<br>OGCMN       OGCMX        OGC         OC       YGC   FGC    FGCT     GCT<br>0.0   1431552.0   1431552.0   1431552.0   1431552.0   939     0    0.000   16.459</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">jstat -gcmetacapacity &lt;pid&gt; 元数据空间统计</span><br><span class="line">  </span><br><span class="line">|列名|描述|</span><br><span class="line">|:---:|:---:|</span><br><span class="line">|**MCMN**|最小Metaspace元空间容量(kB)|</span><br><span class="line">|**MCMX**|最大Metaspace元空间容量(kB)|</span><br><span class="line">|**MC**|Metaspace元空间容量(kB)|</span><br><span class="line">|**CCSMN**|压缩类最小空间(kB)|</span><br><span class="line">|**CCSMX**|压缩类最大空间(kB)|</span><br><span class="line">|**CCSC**|压缩类空间容量(kb)|</span><br><span class="line">|**CCSU**|压缩类使用空间(kb)|</span><br><span class="line">|**YGC**|年轻代gc回收数量|</span><br><span class="line">|**FGC**|Full gc 执行回收数量|</span><br><span class="line">|**FGCT**|老年代GC时间|</span><br><span class="line">|**GCT**|总垃圾回收时间|</span><br><span class="line"></span><br><span class="line">例子如下</span><br></pre></td></tr></table></figure>
+
+<p>jstat -gcmetacapacity  86517<br>MCMN       MCMX        MC       CCSMN      CCSMX       CCSC     YGC   FGC    FGCT     GCT<br>0.0  1140736.0   104656.0        0.0  1048576.0    14492.0   965     0    0.000   16.805</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">jstat -gcutil &lt;pid&gt;  垃圾收集统计信息摘要</span><br><span class="line">  </span><br><span class="line">|列名|描述|</span><br><span class="line">|:---:|:---:|</span><br><span class="line">|**S0**|幸存区Survior  S0利用率占空间当前容量的百分比|</span><br><span class="line">|**S1**|幸存区Survior  S1利用率占空间当前容量的百分比|</span><br><span class="line">|**E**|Eden区利用率占空间当前容量的百分比|</span><br><span class="line">|**O**|Old老年代利用率占空间当前容量的百分比|</span><br><span class="line">|**M**|Metaspace元空间利用率占空间当前容量的百分比|</span><br><span class="line">|**CCS**|以百分比形式压缩的类空间利用率|</span><br><span class="line">|**YGC**|年轻代 GC 事件的数量|</span><br><span class="line">|**YGCT**|年轻代垃圾回收时间|</span><br><span class="line">|**FGCT**|老年代GC时间|</span><br><span class="line">|**GCT**|总垃圾回收时间|</span><br><span class="line"></span><br><span class="line">例子如下</span><br></pre></td></tr></table></figure>
+
+<p>jstat -gcutil  86517<br>S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT<br>0.00   7.40  71.87  86.94  93.55  79.98    979   16.992     0    0.000   16.992</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">jstat -printcompilation   Java HotSpot 虚拟机 编译方法统计</span><br><span class="line"></span><br><span class="line">|列名|描述|</span><br><span class="line">|:---:|:---:|</span><br><span class="line">|**Compiled**|最近编译的方法执行的编译任务数|</span><br><span class="line">|**Size**|最近编译的方法的字节码的字节数|</span><br><span class="line">|**Type**|最近编译的方法的编译类型|</span><br><span class="line">|**Method**|标识最近编译的方法的类名和方法名|</span><br><span class="line"></span><br><span class="line">例子如下</span><br></pre></td></tr></table></figure>
+
+<p>jstat -printcompilation  86517<br>Compiled  Size  Type Method<br>29939     77    1 org/apache/lucene/codecs/perfield/PerFieldDocValuesFormat$FieldsWriter <init></init></p>
+<pre><code>
+
+----
+[Oracle官方文档](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html)</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/14/ConcurrentHashMap源码解析/" rel="next" title="ConcurrentHashMap源码解析">
+                <i class="fa fa-chevron-left"></i> ConcurrentHashMap源码解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/03/20/Spring-Bean如何初始化的/" rel="prev" title="Spring Bean如何初始化的">
+                Spring Bean如何初始化的 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="神易峰">
+            
+              <p class="site-author-name" itemprop="name">神易峰</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">神易峰</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">239k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">3:37</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.2</div>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shenyifengtk.github.io/2022/03/20/Jstat命令详解/";
+    this.page.identifier = "2022/03/20/Jstat命令详解/";
+    this.page.title = 'Jstat命令详解';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "box";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "bottomCenter";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+        flOptions.iconStyle = "box";
+      
+        flOptions.boxForm = "horizontal";
+      
+        flOptions.position = "middleRight";
+      
+        flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
