@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="使用Spring MVC开发的，应该都使用过@RequstBody接收json参数，转换成pojo对象，非常方便阿，但是功能并不是很全面，有点点瑕疵，并不能支持json key 方式注入到String、Integer 这类类型对象。    前端传值 后端接收 结果    {“id”: 3,”name”:”xxx”} User(id,name) 成功注入   {“id”: 3,”name”:”xxx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="认识Spring参数解析器">
+<meta property="og:url" content="https://shenyifengtk.github.io/2022/04/11/认识Spring参数解析器/index.html">
+<meta property="og:site_name" content="神易风 blog">
+<meta property="og:description" content="使用Spring MVC开发的，应该都使用过@RequstBody接收json参数，转换成pojo对象，非常方便阿，但是功能并不是很全面，有点点瑕疵，并不能支持json key 方式注入到String、Integer 这类类型对象。    前端传值 后端接收 结果    {“id”: 3,”name”:”xxx”} User(id,name) 成功注入   {“id”: 3,”name”:”xxx">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-04-11T15:17:50.038Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="认识Spring参数解析器">
+<meta name="twitter:description" content="使用Spring MVC开发的，应该都使用过@RequstBody接收json参数，转换成pojo对象，非常方便阿，但是功能并不是很全面，有点点瑕疵，并不能支持json key 方式注入到String、Integer 这类类型对象。    前端传值 后端接收 结果    {“id”: 3,”name”:”xxx”} User(id,name) 成功注入   {“id”: 3,”name”:”xxx">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://shenyifengtk.github.io/2022/04/11/认识Spring参数解析器/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>认识Spring参数解析器 | 神易风 blog</title>
+  
+
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111663733-2"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !false) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-111663733-2');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">神易风 blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">求知若饥，虚心若愚</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenyifengtk.github.io/2022/04/11/认识Spring参数解析器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="神易峰">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神易风 blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">认识Spring参数解析器
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-04-11 23:16:00 / 修改时间：23:17:50" itemprop="dateCreated datePublished" datetime="2022-04-11T23:16:00+08:00">2022-04-11</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2022/04/11/认识Spring参数解析器/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/04/11/认识Spring参数解析器/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">16k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">14 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>使用Spring MVC开发的，应该都使用过@RequstBody接收json参数，转换成pojo对象，非常方便阿，但是功能并不是很全面，有点点瑕疵，并不能支持json key 方式注入到String、Integer 这类类型对象。</p>
+<table>
+<thead>
+<tr>
+<th align="center">前端传值</th>
+<th align="center">后端接收</th>
+<th align="center">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">{“id”: 3,”name”:”xxx”}</td>
+<td align="center">User(id,name)</td>
+<td align="center">成功注入</td>
+</tr>
+<tr>
+<td align="center">{“id”: 3,”name”:”xxx”}</td>
+<td align="center">（String name,int id）</td>
+<td align="center">并不支持这个方式</td>
+</tr>
+</tbody></table>
+<p>有时候一个接口只有两个参数上传，我们并不想为此创建一个单独的对象，这样可能会导致每一个hangdler 方法可能都存在一个pojo对象，大部分对象可能并不能被其他handler 共享。 而是希望使用一两个参数就可以接收到。先看下<code>@RequestBody</code>这个注解如何实现将json 转换成pojo对象的，通过spring HandlerMethodArgumentResolver 参数解析器来实现的，了解下接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HandlerMethodArgumentResolver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 *   是否支持方法上参数的处理，只有返回ture，才会执行下面方法</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> parameter the method parameter to check</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if this resolver supports the supplied parameter;</span></span><br><span class="line"><span class="comment">	 * &#123;<span class="doctag">@code</span> false&#125; otherwise</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">supportsParameter</span><span class="params">(MethodParameter parameter)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 将方法参数解析为给定请求的参数值</span></span><br><span class="line"><span class="comment">	 * A &#123;<span class="doctag">@link</span> ModelAndViewContainer&#125; provides access to the model for the</span></span><br><span class="line"><span class="comment">	 * request. A &#123;<span class="doctag">@link</span> WebDataBinderFactory&#125; provides a way to create</span></span><br><span class="line"><span class="comment">	 * a &#123;<span class="doctag">@link</span> WebDataBinder&#125; instance when needed for data binding and</span></span><br><span class="line"><span class="comment">	 * type conversion purposes.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> parameter the method parameter to resolve. This parameter must</span></span><br><span class="line"><span class="comment">	 * have previously been passed to &#123;<span class="doctag">@link</span> #supportsParameter&#125; which must</span></span><br><span class="line"><span class="comment">	 * have returned &#123;<span class="doctag">@code</span> true&#125;.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> mavContainer the ModelAndViewContainer for the current request</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> webRequest the current request</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> binderFactory a factory for creating &#123;<span class="doctag">@link</span> WebDataBinder&#125; instances</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> the resolved argument value, or &#123;<span class="doctag">@code</span> null&#125; if not resolvable</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@throws</span> Exception in case of errors with the preparation of argument values</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Nullable</span></span><br><span class="line">	<span class="function">Object <span class="title">resolveArgument</span><span class="params">(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,</span></span></span><br><span class="line"><span class="function"><span class="params">			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在<code>RequestMappingHandlerAdapter</code>下可以看见默认参数解析器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> List&lt;HandlerMethodArgumentResolver&gt; <span class="title">getDefaultArgumentResolvers</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	List&lt;HandlerMethodArgumentResolver&gt; resolvers = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Annotation-based argument resolution</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RequestParamMethodArgumentResolver(getBeanFactory(), <span class="keyword">false</span>));  <span class="comment">//@RequestPart  文件注入</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RequestParamMapMethodArgumentResolver()); <span class="comment">//@RequestParam </span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> PathVariableMethodArgumentResolver()); <span class="comment">//@PathVariable</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> PathVariableMapMethodArgumentResolver()); <span class="comment">//@PathVariable 会返回一个Map对象</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> MatrixVariableMethodArgumentResolver()); <span class="comment">//@MatrixVariable</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> MatrixVariableMapMethodArgumentResolver()); <span class="comment">//MatrixVariable 会返回Map 对象</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> ServletModelAttributeMethodProcessor(<span class="keyword">false</span>)); <span class="comment">//属性板顶</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RequestResponseBodyMethodProcessor(getMessageConverters(), <span class="keyword">this</span>.requestResponseBodyAdvice)); <span class="comment">//@RequestBody 后面重点讲解</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RequestPartMethodArgumentResolver(getMessageConverters(), <span class="keyword">this</span>.requestResponseBodyAdvice)); <span class="comment">//@RequestPart</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RequestHeaderMethodArgumentResolver(getBeanFactory())); <span class="comment">// @RequestHeader</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RequestHeaderMapMethodArgumentResolver()); <span class="comment">//@RequestHeader Map对象</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> ServletCookieValueMethodArgumentResolver(getBeanFactory())); <span class="comment">//Cookie 值 注入</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> ExpressionValueMethodArgumentResolver(getBeanFactory())); <span class="comment">//@Value</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> SessionAttributeMethodArgumentResolver()); <span class="comment">//@SessionAttribute</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RequestAttributeMethodArgumentResolver()); <span class="comment">//@RequestAttribute</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Type-based argument resolution</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> ServletRequestMethodArgumentResolver());  <span class="comment">//servlet api对象 HttpServletRequest  这类</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> ServletResponseMethodArgumentResolver()); <span class="comment">//ServletResponse 对象注入</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> HttpEntityMethodProcessor(getMessageConverters(), <span class="keyword">this</span>.requestResponseBodyAdvice)); <span class="comment">//RequestEntity、HttpEntity</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RedirectAttributesMethodArgumentResolver()); <span class="comment">//重定向</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> ModelMethodProcessor()); <span class="comment">//返回Model 对象</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> MapMethodProcessor()); <span class="comment">// 处理方法参数返回一个Map</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> ErrorsMethodArgumentResolver()); <span class="comment">//处理错误方法参数，返回最后一个对象</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> SessionStatusMethodArgumentResolver()); <span class="comment">//SessionStatus</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> UriComponentsBuilderMethodArgumentResolver());  <span class="comment">//UriComponentsBuilder</span></span><br><span class="line">	<span class="keyword">if</span> (KotlinDetector.isKotlinPresent()) &#123;</span><br><span class="line">		resolvers.add(<span class="keyword">new</span> ContinuationHandlerMethodArgumentResolver());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Custom arguments 自定义</span></span><br><span class="line">	<span class="keyword">if</span> (getCustomArgumentResolvers() != <span class="keyword">null</span>) &#123;</span><br><span class="line">		resolvers.addAll(getCustomArgumentResolvers());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Catch-all</span></span><br><span class="line">	resolvers.add(<span class="keyword">new</span> PrincipalMethodArgumentResolver()); </span><br><span class="line">	resolvers.add(<span class="keyword">new</span> RequestParamMethodArgumentResolver(getBeanFactory(), <span class="keyword">true</span>));</span><br><span class="line">	resolvers.add(<span class="keyword">new</span> ServletModelAttributeMethodProcessor(<span class="keyword">true</span>));</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> resolvers;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看见大部分方法参数都是通过上面处理器去实现的，重点放在RequestResponseBodyMethodProcessor 如何注入json的，主要看两个方法如何实现的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">supportsParameter</span><span class="params">(MethodParameter parameter)</span> </span>&#123;</span><br><span class="line">               <span class="comment">//只有使用了@RequestBody 注解默认就开启处理</span></span><br><span class="line">	<span class="keyword">return</span> parameter.hasParameterAnnotation(RequestBody.class); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">resolveArgument</span><span class="params">(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,</span></span></span><br><span class="line"><span class="function"><span class="params">		NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">	parameter = parameter.nestedIfOptional();</span><br><span class="line">             <span class="comment">//转换成对象了</span></span><br><span class="line">	Object arg = readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());</span><br><span class="line">              <span class="comment">//获取参数变量名称</span></span><br><span class="line">	String name = Conventions.getVariableNameForParameter(parameter);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (binderFactory != <span class="keyword">null</span>) &#123; <span class="comment">//使用WebDatabinder 对已经序列化对象属性绑定处理</span></span><br><span class="line">		WebDataBinder binder = binderFactory.createBinder(webRequest, arg, name);</span><br><span class="line">		<span class="keyword">if</span> (arg != <span class="keyword">null</span>) &#123;</span><br><span class="line">			validateIfApplicable(binder, parameter);</span><br><span class="line">			<span class="keyword">if</span> (binder.getBindingResult().hasErrors() &amp;&amp; isBindExceptionRequired(binder, parameter)) &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> MethodArgumentNotValidException(parameter, binder.getBindingResult());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (mavContainer != <span class="keyword">null</span>) &#123;</span><br><span class="line">			mavContainer.addAttribute(BindingResult.MODEL_KEY_PREFIX + name, binder.getBindingResult());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> adaptArgumentIfNecessary(arg, parameter);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将json 序列号成对象实现都是在readWithMessageConverters 方法中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> &lt;T&gt; <span class="function">Object <span class="title">readWithMessageConverters</span><span class="params">(HttpInputMessage inputMessage, MethodParameter parameter,</span></span></span><br><span class="line"><span class="function"><span class="params">		Type targetType)</span> <span class="keyword">throws</span> IOException, HttpMediaTypeNotSupportedException, HttpMessageNotReadableException </span>&#123;</span><br><span class="line"></span><br><span class="line">	MediaType contentType;</span><br><span class="line">	<span class="keyword">boolean</span> noContentType = <span class="keyword">false</span>;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		contentType = inputMessage.getHeaders().getContentType();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (InvalidMediaTypeException ex) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> HttpMediaTypeNotSupportedException(ex.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (contentType == <span class="keyword">null</span>) &#123;</span><br><span class="line">		noContentType = <span class="keyword">true</span>;</span><br><span class="line">		contentType = MediaType.APPLICATION_OCTET_STREAM;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Class&lt;?&gt; contextClass = parameter.getContainingClass();</span><br><span class="line">	Class&lt;T&gt; targetClass = (targetType <span class="keyword">instanceof</span> Class ? (Class&lt;T&gt;) targetType : <span class="keyword">null</span>);</span><br><span class="line">	<span class="keyword">if</span> (targetClass == <span class="keyword">null</span>) &#123;</span><br><span class="line">		ResolvableType resolvableType = ResolvableType.forMethodParameter(parameter);</span><br><span class="line">		targetClass = (Class&lt;T&gt;) resolvableType.resolve();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	HttpMethod httpMethod = (inputMessage <span class="keyword">instanceof</span> HttpRequest ? ((HttpRequest) inputMessage).getMethod() : <span class="keyword">null</span>);</span><br><span class="line">	Object body = NO_VALUE;</span><br><span class="line"></span><br><span class="line">	EmptyBodyCheckingHttpInputMessage message;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">                       <span class="comment">//创建重复读写流</span></span><br><span class="line">		message = <span class="keyword">new</span> EmptyBodyCheckingHttpInputMessage(inputMessage); </span><br><span class="line">                      <span class="comment">//通过HttpMessageConverter 来对String json 转换成对象</span></span><br><span class="line">		<span class="keyword">for</span> (HttpMessageConverter&lt;?&gt; converter : <span class="keyword">this</span>.messageConverters) &#123;</span><br><span class="line">			Class&lt;HttpMessageConverter&lt;?&gt;&gt; converterType = (Class&lt;HttpMessageConverter&lt;?&gt;&gt;) converter.getClass();</span><br><span class="line">			GenericHttpMessageConverter&lt;?&gt; genericConverter =</span><br><span class="line">					(converter <span class="keyword">instanceof</span> GenericHttpMessageConverter ? (GenericHttpMessageConverter&lt;?&gt;) converter : <span class="keyword">null</span>);</span><br><span class="line">			<span class="keyword">if</span> (genericConverter != <span class="keyword">null</span> ? genericConverter.canRead(targetType, contextClass, contentType) :</span><br><span class="line">					(targetClass != <span class="keyword">null</span> &amp;&amp; converter.canRead(targetClass, contentType))) &#123;</span><br><span class="line">				<span class="keyword">if</span> (message.hasBody()) &#123;</span><br><span class="line">					HttpInputMessage msgToUse =</span><br><span class="line">							getAdvice().beforeBodyRead(message, parameter, targetType, converterType); <span class="comment">//前置处理</span></span><br><span class="line">					body = (genericConverter != <span class="keyword">null</span> ? genericConverter.read(targetType, contextClass, msgToUse) :</span><br><span class="line">							((HttpMessageConverter&lt;T&gt;) converter).read(targetClass, msgToUse));</span><br><span class="line">					body = getAdvice().afterBodyRead(body, msgToUse, parameter, targetType, converterType); <span class="comment">//后置处理 类型通知</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> &#123;</span><br><span class="line">					body = getAdvice().handleEmptyBody(<span class="keyword">null</span>, message, parameter, targetType, converterType);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> HttpMessageNotReadableException(<span class="string">"I/O error while reading input message"</span>, ex, inputMessage);</span><br><span class="line">	&#125;</span><br><span class="line">               <span class="comment">//缩减部分代码</span></span><br><span class="line">	<span class="keyword">return</span> body;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>http 请求内容调用GenericHttpMessageConverter read 方法转换成对象，这时调用的是<code>AbstractJackson2HttpMessageConverter</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readJavaType</span><span class="params">(JavaType javaType, HttpInputMessage inputMessage)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	MediaType contentType = inputMessage.getHeaders().getContentType();</span><br><span class="line">	Charset charset = getCharset(contentType);</span><br><span class="line"></span><br><span class="line">	ObjectMapper objectMapper = selectObjectMapper(javaType.getRawClass(), contentType);</span><br><span class="line">	Assert.state(objectMapper != <span class="keyword">null</span>, <span class="string">"No ObjectMapper for "</span> + javaType);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">boolean</span> isUnicode = ENCODINGS.containsKey(charset.name()) ||</span><br><span class="line">			<span class="string">"UTF-16"</span>.equals(charset.name()) ||</span><br><span class="line">			<span class="string">"UTF-32"</span>.equals(charset.name());</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (inputMessage <span class="keyword">instanceof</span> MappingJacksonInputMessage) &#123; <span class="comment">//这个是使用了JsonView </span></span><br><span class="line">			Class&lt;?&gt; deserializationView = ((MappingJacksonInputMessage) inputMessage).getDeserializationView();</span><br><span class="line">			<span class="keyword">if</span> (deserializationView != <span class="keyword">null</span>) &#123;</span><br><span class="line">				ObjectReader objectReader = objectMapper.readerWithView(deserializationView).forType(javaType);</span><br><span class="line">				<span class="keyword">if</span> (isUnicode) &#123;</span><br><span class="line">					<span class="keyword">return</span> objectReader.readValue(inputMessage.getBody());</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> &#123;</span><br><span class="line">					Reader reader = <span class="keyword">new</span> InputStreamReader(inputMessage.getBody(), charset);</span><br><span class="line">					<span class="keyword">return</span> objectReader.readValue(reader);  <span class="comment">//反序列化成Java 对象</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (isUnicode) &#123;</span><br><span class="line">			<span class="keyword">return</span> objectMapper.readValue(inputMessage.getBody(), javaType);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			Reader reader = <span class="keyword">new</span> InputStreamReader(inputMessage.getBody(), charset);</span><br><span class="line">			<span class="keyword">return</span> objectMapper.readValue(reader, javaType);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (InvalidDefinitionException ex) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> HttpMessageConversionException(<span class="string">"Type definition error: "</span> + ex.getType(), ex);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (JsonProcessingException ex) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> HttpMessageNotReadableException(<span class="string">"JSON parse error: "</span> + ex.getOriginalMessage(), ex, inputMessage);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看见@RequestBody 是通过GenericHttpMessageConverter class 调用ObjectMapper  readValue 进行转换的，只能将json转换成pojo 对象， 并不支持简单类型 String、Integer、Long这类转换的，有着天然缺陷。如果想将json key 注入到参数，需要手动实现一个参数解析器，下面展示简单实现代码。</p>
+<h3 id="动手实现"><a href="#动手实现" class="headerlink" title="动手实现"></a>动手实现</h3><p>目标： 我们希望创建一个类似@RequestBody的注解，标注当前参数支持json key直接注入，这个注解也可以直接在方法修饰，表示整个方法参数都是用注解，当然也可以支持整个类，表示所有方法的参数都支持。在实现一个对应注解的参数解析器。</p>
+<p>创建注解类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.PARAMETER,ElementType.METHOD,ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> JsonKeyValue &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  json key 如何没有则使用 类型变量名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@AliasFor</span>(<span class="string">"name"</span>)</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AliasFor</span>(<span class="string">"value"</span>)</span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现参数解析器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestJsonKeyValueMethodProcessor</span>  <span class="keyword">implements</span> <span class="title">HandlerMethodArgumentResolver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ObjectMapper objectMapper ;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RequestJsonKeyValueMethodProcessor</span><span class="params">(ObjectMapper objectMapper)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.objectMapper = objectMapper;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">supportsParameter</span><span class="params">(MethodParameter parameter)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> b = parameter.hasParameterAnnotation(JsonKeyValue.class);</span><br><span class="line">        <span class="keyword">if</span> (!b) &#123;</span><br><span class="line">            JsonKeyValue value = parameter.getMethodAnnotation(JsonKeyValue.class);  <span class="comment">//从方法上找注解</span></span><br><span class="line">            b = value != <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">if</span> (!b)&#123;</span><br><span class="line">                value = parameter.getContainingClass().getAnnotation(JsonKeyValue.class); <span class="comment">//从类上找注解</span></span><br><span class="line">                b = value != <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">resolveArgument</span><span class="params">(MethodParameter parameter, ModelAndViewContainer mavContainer,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        parameter = parameter.nestedIfOptional();</span><br><span class="line">        HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);</span><br><span class="line">        Assert.state(servletRequest != <span class="keyword">null</span>, <span class="string">"No HttpServletRequest"</span>);</span><br><span class="line">        ServletServerHttpRequest inputMessage = <span class="keyword">new</span> ServletServerHttpRequest(servletRequest);</span><br><span class="line">        MediaType contentType = inputMessage.getHeaders().getContentType();</span><br><span class="line">        Charset charset = getCharset(contentType);</span><br><span class="line">        Reader reader = <span class="keyword">new</span> InputStreamReader(inputMessage.getBody(), charset);</span><br><span class="line">        JsonNode jsonNode = objectMapper.readTree(reader);</span><br><span class="line">        String parameterName = parameterName(parameter);</span><br><span class="line">        JsonNode path = jsonNode.path(parameterName);</span><br><span class="line">        Object o = objectMapper.convertValue(path, parameter.getNestedParameterType());</span><br><span class="line">        <span class="keyword">return</span> o;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">parameterName</span><span class="params">(MethodParameter parameter)</span></span>&#123;</span><br><span class="line">        JsonKeyValue annotation = parameter.getParameterAnnotation(JsonKeyValue.class);</span><br><span class="line">        <span class="keyword">if</span> (annotation != <span class="keyword">null</span>)&#123;</span><br><span class="line">            String name = annotation.name();</span><br><span class="line">            <span class="keyword">if</span> (StringUtils.hasText(name))</span><br><span class="line">                <span class="keyword">return</span> annotation.name();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> parameter.getParameterName();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//抄袭  AbstractMessageConverterMethodArgumentResolver  主要是防止将流读入后，controller 方法不能在读了</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">EmptyBodyCheckingHttpInputMessage</span> <span class="keyword">implements</span> <span class="title">HttpInputMessage</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> HttpHeaders headers;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Nullable</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> InputStream body;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">EmptyBodyCheckingHttpInputMessage</span><span class="params">(HttpInputMessage inputMessage)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.headers = inputMessage.getHeaders();</span><br><span class="line">            InputStream inputStream = inputMessage.getBody();</span><br><span class="line">            <span class="keyword">if</span> (inputStream.markSupported()) &#123;</span><br><span class="line">                inputStream.mark(<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">this</span>.body = (inputStream.read() != -<span class="number">1</span> ? inputStream : <span class="keyword">null</span>);</span><br><span class="line">                inputStream.reset();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                PushbackInputStream pushbackInputStream = <span class="keyword">new</span> PushbackInputStream(inputStream);</span><br><span class="line">                <span class="keyword">int</span> b = pushbackInputStream.read();</span><br><span class="line">                <span class="keyword">if</span> (b == -<span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.body = <span class="keyword">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">this</span>.body = pushbackInputStream;</span><br><span class="line">                    pushbackInputStream.unread(b);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> HttpHeaders <span class="title">getHeaders</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.headers;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> InputStream <span class="title">getBody</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> (<span class="keyword">this</span>.body != <span class="keyword">null</span> ? <span class="keyword">this</span>.body : StreamUtils.emptyInput());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasBody</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> (<span class="keyword">this</span>.body != <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Charset <span class="title">getCharset</span><span class="params">(@Nullable MediaType contentType)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (contentType != <span class="keyword">null</span> &amp;&amp; contentType.getCharset() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> contentType.getCharset();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> StandardCharsets.UTF_8;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>添加自定义参数解析器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableWebMvc</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebMvcConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(WebMvcConfig.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ObjectMapper objectMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addArgumentResolvers</span><span class="params">(List&lt;HandlerMethodArgumentResolver&gt; resolvers)</span> </span>&#123;</span><br><span class="line">        resolvers.add(<span class="keyword">new</span> RequestJsonKeyValueMethodProcessor(objectMapper));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里不用担心自定义参数解析器会覆盖spring 原生的解析器，这里会将addArgumentResolvers 添加解析器自动放入到CustomArgumentResolvers中。<br>一个简单自定义参数解析器就完成了，支持普通类的String、Integer 这些参数的解析。注意的是这个参数解析器并没有考虑参数为空的处理，Optional 这类情况只满足一些简单、快速开发的场景。不知道各位同行是否在日常开发中有没有使用到这些知识，我公司的基础框架就是使用这些技术来做快速开发的，对开发效率提升特别大的。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/28/Thread线程知识点讲解/" rel="next" title="Thread线程知识点讲解">
+                <i class="fa fa-chevron-left"></i> Thread线程知识点讲解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="神易峰">
+            
+              <p class="site-author-name" itemprop="name">神易峰</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#动手实现"><span class="nav-number">1.</span> <span class="nav-text">动手实现</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">神易峰</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">274k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">4:09</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.2</div>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shenyifengtk.github.io/2022/04/11/认识Spring参数解析器/";
+    this.page.identifier = "2022/04/11/认识Spring参数解析器/";
+    this.page.title = '认识Spring参数解析器';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shenyifengtk-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "box";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "bottomCenter";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+        flOptions.iconStyle = "box";
+      
+        flOptions.boxForm = "horizontal";
+      
+        flOptions.position = "middleRight";
+      
+        flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Linkedin";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
