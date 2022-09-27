@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://shenyifengtk.github.io/2022/09/27/Spring-Boot%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%AA%E4%BA%BA%E8%A7%81%E8%A7%A3/</loc>
+    
+    <lastmod>2022-09-27T15:32:11.996Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://shenyifengtk.github.io/2022/09/27/ReentrantReadWriteLock%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    
+    <lastmod>2022-09-27T15:28:08.030Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://shenyifengtk.github.io/2022/07/27/ThreadLocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
     
     <lastmod>2022-07-27T14:48:54.871Z</lastmod>
